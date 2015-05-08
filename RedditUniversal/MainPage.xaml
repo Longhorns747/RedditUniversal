@@ -6,10 +6,37 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="WideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="600" />
+                    </VisualState.StateTriggers>
 
-    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
-        <WebView x:Name="web" RelativePanel.AlignHorizontalCenterWithPanel="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="600" Width="360" NavigationStarting="web_NavStart" NavigationCompleted="web_NavComplete" />
-        <Button x:Name="button" RelativePanel.AlignHorizontalCenterWithPanel="True" Content="TehButton" Click="button_Click" RelativePanel.Below="web"/>
-        <TextBlock x:Name="statusTextBlock" HorizontalAlignment="Left" Height="25" RelativePanel.LeftOf="button" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="78"/>
-    </RelativePanel>
+                    <VisualState.Setters>
+                        <Setter Target="web.Width"
+                    Value="600" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState x:Name="NarrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="web.Width"
+                                Value="289" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+
+        <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RequestedTheme="Dark">
+            <WebView x:Name="web" RelativePanel.AlignHorizontalCenterWithPanel="True" NavigationStarting="web_NavStart" Height="500" Width="289" />
+            <Button x:Name="button" RelativePanel.AlignHorizontalCenterWithPanel="True" Content="TehButton" Click="button_Click" RelativePanel.Below="web"/>
+        </RelativePanel>
+    </Grid>
 </Page>

@@ -39,19 +39,6 @@ namespace RedditUniversal
             web.Navigate(new Uri(url));
         }
 
-        private void web_NavComplete(WebView sender, WebViewNavigationCompletedEventArgs args)
-        {
-            if (args.IsSuccess == true)
-            {
-                statusTextBlock.Text = "Navigation to " + args.Uri.ToString() + " completed successfully.";
-            }
-            else
-            {
-                statusTextBlock.Text = "Navigation to: " + args.Uri.ToString() +
-                                       " failed with error " + args.WebErrorStatus.ToString();
-            }
-        }
-
         private void web_NavStart(WebView sender, WebViewNavigationStartingEventArgs args)
         {
             string target_url = "";
