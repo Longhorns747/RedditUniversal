@@ -49,6 +49,8 @@ namespace RedditUniversal
                 {
                     string[] parts = target_url.Split(new char[] { '#', '&' });
                     string access_token = parts[1].Substring(13);
+
+                    this.Frame.Navigate(typeof(ListingDisplay), access_token);
                 }
 
             }
