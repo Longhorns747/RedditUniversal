@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace RedditUniversal.Utils
 {
-    //http://www.codeproject.com/Tips/497123/How-to-make-REST-requests-with-Csharp
     public enum HttpVerb
     {
         GET,
@@ -19,39 +20,44 @@ namespace RedditUniversal.Utils
 
     public class RestClient
     {
+        const string BASE_URL = "https://oauth.reddit.com";
         public string EndPoint { get; set; }
         public HttpVerb Method { get; set; }
         public string ContentType { get; set; }
         public string PostData { get; set; }
+        public string access_token { get; set; }
 
         public RestClient()
         {
             EndPoint = "";
             Method = HttpVerb.GET;
-            ContentType = "text/xml";
+            ContentType = "text/json";
             PostData = "";
         }
-        public RestClient(string endpoint)
+        public RestClient(string endpoint, string access_token)
         {
             EndPoint = endpoint;
             Method = HttpVerb.GET;
-            ContentType = "text/xml";
+            ContentType = "text/json";
             PostData = "";
+            this.access_token = access_token;
         }
-        public RestClient(string endpoint, HttpVerb method)
+        public RestClient(string endpoint, HttpVerb method, string access_token)
         {
             EndPoint = endpoint;
             Method = method;
-            ContentType = "text/xml";
+            ContentType = "text/json";
             PostData = "";
+            this.access_token = access_token;
         }
 
-        public RestClient(string endpoint, HttpVerb method, string postData)
+        public RestClient(string endpoint, HttpVerb method, string postData, string access_token)
         {
             EndPoint = endpoint;
             Method = method;
-            ContentType = "text/xml";
+            ContentType = "text/json";
             PostData = postData;
+            this.access_token = access_token;
         }
 
 
@@ -62,44 +68,24 @@ namespace RedditUniversal.Utils
 
         public async Task<string> MakeRequest(string parameters)
         {
-            var request = (HttpWebRequest)WebRequest.Create(EndPoint + parameters);
-
-            request.Method = Method.ToString();
-            request.ContentType = ContentType;
-
-            if (!string.IsNullOrEmpty(PostData) && Method == HttpVerb.POST)
+            using (var client = new HttpClient())
             {
-                var encoding = new UTF8Encoding();
-                var bytes = Encoding.GetEncoding("iso-8859-1").GetBytes(PostData);
+                client.BaseAddress = new Uri(BASE_URL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", access_token);
+                client.DefaultRequestHeaders.Add("User-Agent", "WindowsUniversal");
 
-                using (var writeStream = (await request.GetRequestStreamAsync()))
+                HttpResponseMessage response = await client.GetAsync(EndPoint);
+                if (response.IsSuccessStatusCode)
                 {
-                    writeStream.Write(bytes, 0, bytes.Length);
+                    return await response.Content.ReadAsStringAsync();
                 }
-            }
-
-            using (var response = (await (Task<WebResponse>)request.GetResponseAsync()))
-            {
-                var responseValue = string.Empty;
-                HttpWebResponse httpResponse = (HttpWebResponse)response;
-
-                if (httpResponse.StatusCode != HttpStatusCode.OK)
+                else
                 {
-                    var message = String.Format("Request failed. Received HTTP {0}", httpResponse.StatusCode);
-                    throw new Exception(message);
+                    string content = await response.Content.ReadAsStringAsync();
+                    return content;
                 }
-
-                // grab the response
-                using (var responseStream = response.GetResponseStream())
-                {
-                    if (responseStream != null)
-                        using (var reader = new StreamReader(responseStream))
-                        {
-                            responseValue = reader.ReadToEnd();
-                        }
-                }
-
-                return responseValue;
             }
         }
 

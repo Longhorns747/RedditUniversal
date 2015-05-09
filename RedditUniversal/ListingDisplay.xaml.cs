@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using RedditUniversal.Utils;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -22,6 +23,8 @@ namespace RedditUniversal
     /// </summary>
     public sealed partial class ListingDisplay : Page
     {
+        string access_token = "";
+
         public ListingDisplay()
         {
             this.InitializeComponent();
@@ -29,7 +32,14 @@ namespace RedditUniversal
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            textBlock.Text = (string)e.Parameter;
+            access_token = (string)e.Parameter;
+        }
+
+        private async void getListings_Click(object sender, RoutedEventArgs e)
+        { 
+            RestClient listings_request = new RestClient("subreddits/mine/subscriber/", access_token);
+            string result = await listings_request.MakeRequest();
+            List<string> subreddits = new List<string>();
         }
     }
 }
