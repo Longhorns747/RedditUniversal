@@ -31,14 +31,14 @@ namespace RedditUniversal.Utils
         {
             EndPoint = "";
             Method = HttpVerb.GET;
-            ContentType = "text/json";
+            ContentType = "application/json";
             PostData = "";
         }
         public RestClient(string endpoint, string access_token)
         {
             EndPoint = endpoint;
             Method = HttpVerb.GET;
-            ContentType = "text/json";
+            ContentType = "application/json";
             PostData = "";
             this.access_token = access_token;
         }
@@ -46,7 +46,7 @@ namespace RedditUniversal.Utils
         {
             EndPoint = endpoint;
             Method = method;
-            ContentType = "text/json";
+            ContentType = "application/json";
             PostData = "";
             this.access_token = access_token;
         }
@@ -55,7 +55,7 @@ namespace RedditUniversal.Utils
         {
             EndPoint = endpoint;
             Method = method;
-            ContentType = "text/json";
+            ContentType = "application / json";
             PostData = postData;
             this.access_token = access_token;
         }
@@ -72,11 +72,12 @@ namespace RedditUniversal.Utils
             {
                 client.BaseAddress = new Uri(BASE_URL);
                 client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(ContentType));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", access_token);
                 client.DefaultRequestHeaders.Add("User-Agent", "WindowsUniversal");
 
-                HttpResponseMessage response = await client.GetAsync(EndPoint);
+                string paramList = (parameters.Equals("")) ? "" : "?" + parameters;
+                HttpResponseMessage response = await client.GetAsync(EndPoint + paramList);
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadAsStringAsync();
@@ -89,6 +90,6 @@ namespace RedditUniversal.Utils
             }
         }
 
-    } // class
+    }
 
 }
