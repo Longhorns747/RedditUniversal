@@ -13,6 +13,7 @@ namespace RedditUniversal.Models
         public string thumbnail { get; set; }
         public string title { get; set; }
         public string url { get; set; }
+        public string after { get; set; }
 
         public Link(string id, string author, string thumbnail, string title, string url)
         {
@@ -25,11 +26,23 @@ namespace RedditUniversal.Models
 
         public Link(Dictionary<string, string> properties)
         {
-            this.id = properties["id"];
-            this.author = properties["author"];
-            this.thumbnail = properties["thumbnail"];
-            this.title = properties["title"];
-            this.url = properties["url"];
+            if(properties.Keys.Contains("after"))
+            {
+                this.after = properties["after"];
+            }
+            else
+            {
+                this.id = properties["id"];
+                this.author = properties["author"];
+                this.thumbnail = properties["thumbnail"];
+                this.title = properties["title"];
+                this.url = properties["url"];
+            }
+        }
+
+        public Link(string after)
+        {
+            this.after = after;
         }
 
         public static List<string> GetTemplate()

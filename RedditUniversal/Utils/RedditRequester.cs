@@ -121,6 +121,14 @@ namespace RedditUniversal.Utils
 
                     result.Add(property_dic);
                 }
+
+                if(reader.Value != null && reader.Value.Equals("after"))
+                {
+                    reader.Read();
+                    Dictionary<string, string> after = new Dictionary<string, string>();
+                    after["after"] = (string)reader.Value;
+                    result.Add(after);
+                }
             }
 
             return result;
