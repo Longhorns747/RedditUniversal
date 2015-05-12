@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using RedditUniversal.Utils;
 using RedditUniversal.Models;
+using Windows.UI.Xaml.Media.Imaging;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -37,7 +38,7 @@ namespace RedditUniversal
         {
             access_token = (string)e.Parameter;
             requester = new RedditRequester(access_token);
-            List<Subreddit> subreddits = await GetSubreddits();
+            //List<Subreddit> subreddits = await GetSubreddits();
             GetHot();
         }
 
@@ -48,18 +49,55 @@ namespace RedditUniversal
 
         private async void GetHot()
         {
-            List<Link> links = await requester.GetHot("");
+            List<Link> links = await requester.GetHot("limit=10");
+            Link after = links.Last();
+            links.Remove(links.Last());
+
             BuildUI(links);
         }
 
         private async void GetHot(Subreddit target)
         {
-            List<Link> links = await requester.GetHot(target, "");
+            List<Link> links = await requester.GetHot(target, "limit=10");
         }
 
         private void BuildUI(List<Link> links)
         {
+            int i = 0;
+            foreach(Link link in links)
+            {
+                HyperlinkButton curr_button = new HyperlinkButton();
 
+                StackPanel button_content = new StackPanel();
+                button_content.Orientation = Orientation.Horizontal;
+
+                Uri thumb;
+                if(Uri.TryCreate(link.url, UriKind.Absolute, out thumb))
+                {
+                    BitmapImage myBitmapImage = new BitmapImage(thumb);
+                    Image thumbnail = new Image();
+                    thumbnail.Width = 40;
+                    thumbnail.Height = 40;
+                    thumbnail.Source = myBitmapImage;
+                    button_content.Children.Add(thumbnail);
+                }
+
+                TextBlock caption = new TextBlock();
+                caption.Text = link.title;
+
+                button_content.Children.Add(caption);
+
+                curr_button.NavigateUri = new Uri(link.url);
+                curr_button.Content = button_content;
+                Grid.SetRow(curr_button, i);
+                i++;
+
+                RowDefinition row = new RowDefinition();
+                row.Height = GridLength.Auto;
+
+                LinkPanel.RowDefinitions.Add(row);
+                LinkPanel.Children.Add(curr_button);
+            }
         }
     }
 }

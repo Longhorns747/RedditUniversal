@@ -22,6 +22,7 @@ namespace RedditUniversal.Utils
         public async Task<List<Subreddit>> GetSubreddits(string parameters)
         {
             string url = "subreddits/mine/subscriber/";
+            url = (parameters.Equals("")) ? url : url + "?" + parameters;
             RestClient listings_request = new RestClient(url, access_token);
             string result = await listings_request.MakeRequest(parameters);
             JsonTextReader reader = new JsonTextReader(new StringReader(result));
@@ -55,6 +56,7 @@ namespace RedditUniversal.Utils
         public async Task<List<Link>> GetHot(Subreddit target, string parameters)
         {
             string url = (target.id.Equals("")) ? "/hot" : "/r/" + target.display_name + "/hot";
+            url = (parameters.Equals("")) ? url : url + "?" + parameters;
             RestClient listings_request = new RestClient(url, access_token);
             string result = await listings_request.MakeRequest(parameters);
             return GetLinkProperties(result);
