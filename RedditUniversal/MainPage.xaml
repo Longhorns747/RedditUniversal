@@ -6,36 +6,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Grid>
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState x:Name="WideState">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="600" />
-                    </VisualState.StateTriggers>
+    
+    <Grid RequestedTheme="Dark">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-                    <VisualState.Setters>
-                        <Setter Target="web.Width"
-                    Value="600" />
-                    </VisualState.Setters>
-                </VisualState>
-
-                <VisualState x:Name="NarrowState">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-
-                    <VisualState.Setters>
-                        <Setter Target="web.Width"
-                                Value="289" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-
-
-        <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RequestedTheme="Dark">
-            <WebView x:Name="web" RelativePanel.AlignHorizontalCenterWithPanel="True" NavigationStarting="web_NavStart" Height="500" Width="289" />
-        </RelativePanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock x:Name="titleLabel" Text="RedditUniversal" Grid.Row="0" Grid.Column="0" TextAlignment="Center" RequestedTheme="Dark"></TextBlock>
+        <WebView x:Name="web" NavigationStarting="web_NavStart" Grid.Row="1" Grid.Column="0" />
     </Grid>
 </Page>
