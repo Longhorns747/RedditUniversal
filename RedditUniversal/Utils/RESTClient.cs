@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Net;
+using RedditUniversal.Models;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -89,7 +91,6 @@ namespace RedditUniversal.Utils
                 }
             }
         }
-
     }
 
 }

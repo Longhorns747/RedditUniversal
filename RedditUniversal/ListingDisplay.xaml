@@ -9,7 +9,6 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
         <RelativePanel>
-            <Button x:Name="getListings" Content="Click me :3" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Click="getListings_Click"/>
 
         </RelativePanel>
     </Grid>

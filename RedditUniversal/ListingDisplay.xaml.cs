@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -13,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using RedditUniversal.Utils;
+using RedditUniversal.Models;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -24,21 +26,29 @@ namespace RedditUniversal
     public sealed partial class ListingDisplay : Page
     {
         string access_token = "";
+        RedditRequester requester;
 
         public ListingDisplay()
         {
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             access_token = (string)e.Parameter;
+            requester = new RedditRequester(access_token);
+            List<Subreddit> subreddits = await GetSubreddits();
+            GetHot(subreddits.First());
         }
 
-        private async void getListings_Click(object sender, RoutedEventArgs e)
+        private async Task<List<Subreddit>> GetSubreddits()
         {
-            RedditRequester requestSubreddits = new RedditRequester(access_token);
-            Dictionary<string, string> subreddits = await requestSubreddits.GetSubreddits("");
+            return await requester.GetSubreddits("");
+        }
+
+        private async void GetHot(Subreddit target)
+        {
+            List<Link> links = await requester.GetHot(target, "");
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RedditUniversal.Utils;
+using RedditUniversal.Models;
 using System.IO;
 
 namespace RedditUniversal.Utils
@@ -18,12 +19,13 @@ namespace RedditUniversal.Utils
             this.access_token = access_token;
         }
 
-        public async Task<Dictionary<string, string>> GetSubreddits(string parameters)
+        public async Task<List<Subreddit>> GetSubreddits(string parameters)
         {
-            RestClient listings_request = new RestClient("subreddits/mine/subscriber/", access_token);
+            string url = "subreddits/mine/subscriber/";
+            RestClient listings_request = new RestClient(url, access_token);
             string result = await listings_request.MakeRequest(parameters);
             JsonTextReader reader = new JsonTextReader(new StringReader(result));
-            Dictionary<string, string> subreddits = new Dictionary<string, string>();
+            List<Subreddit> subreddits = new List<Subreddit>();
             while (reader.Read())
             {
                 if (reader.Value != null && reader.Value.Equals("id"))
@@ -38,11 +40,75 @@ namespace RedditUniversal.Utils
 
                     reader.Read();
                     string display_name = (string)reader.Value;
-                    subreddits.Add(display_name, id);
+                    subreddits.Add(new Subreddit(id, display_name));
                 }
             }
 
             return subreddits;
+        }
+
+        public async Task<List<Link>> GetHot(Subreddit target, string parameters)
+        {
+            string url = "/r/" + target.display_name;
+            RestClient listings_request = new RestClient(url, access_token);
+            string result = await listings_request.MakeRequest(parameters);
+            return GetLinkProperties(result);
+        }
+
+        private List<Link> GetLinkProperties(string json)
+        {
+            List<string> properties_to_get = new List<string>();
+            properties_to_get.Add("id");
+            properties_to_get.Add("author");
+            properties_to_get.Add("thumbnail");
+            properties_to_get.Add("url");
+            properties_to_get.Add("title");
+            List<Dictionary<string, string>> properties = GetProperties(properties_to_get, json);
+            List<Link> res = new List<Link>();
+
+            foreach (Dictionary<string, string> link in properties)
+            {
+                Link curr_link = new Link(link["id"], link["author"], link["thumbnail"], link["title"], link["url"]);
+                res.Add(curr_link);
+            }
+
+            return res;
+        }
+
+        private List<Dictionary<string, string>> GetProperties(List<string> properties, string json)
+        {
+            List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
+            JsonTextReader reader = new JsonTextReader(new StringReader(json));
+
+            while (reader.Read())
+            {
+                if (reader.Value != null && reader.Value.Equals(properties.First()))
+                {
+                    Dictionary<string, string> property_dic = new Dictionary<string, string>();
+
+                    reader.Read();
+                    property_dic[properties.First()] = (string)reader.Value;
+                    List<string> except = new List<string>();
+                    except.Add(properties.First());
+
+                    foreach (string property in properties.Except(except))
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader.Value != null && reader.Value.Equals(property))
+                            {
+                                reader.Read();
+                                property_dic[property] = (string)reader.Value;
+                                break;
+                            }
+                        }                        
+                    }
+
+                    result.Add(property_dic);
+                }
+            }
+
+            return result;
         }
     }
 }
