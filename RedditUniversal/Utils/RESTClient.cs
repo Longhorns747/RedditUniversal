@@ -55,7 +55,7 @@ namespace RedditUniversal.Utils
         {
             EndPoint = endpoint;
             Method = method;
-            ContentType = "application / json";
+            ContentType = "application/json";
             PostData = postData;
             this.access_token = access_token;
         }

@@ -36,7 +36,6 @@
 
         <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RequestedTheme="Dark">
             <WebView x:Name="web" RelativePanel.AlignHorizontalCenterWithPanel="True" NavigationStarting="web_NavStart" Height="500" Width="289" />
-            <Button x:Name="button" RelativePanel.AlignHorizontalCenterWithPanel="True" Content="TehButton" Click="button_Click" RelativePanel.Below="web"/>
         </RelativePanel>
     </Grid>
 </Page>

@@ -32,10 +32,6 @@ namespace RedditUniversal
         public MainPage()
         {
             this.InitializeComponent();
-        }
-
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
             web.Navigate(new Uri(url));
         }
 
