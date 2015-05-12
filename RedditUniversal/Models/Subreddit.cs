@@ -16,5 +16,20 @@ namespace RedditUniversal.Models
             this.id = id;
             this.display_name = display_name;
         }
+
+        public Subreddit(Dictionary<string, string> properties)
+        {
+            this.id = properties["id"];
+            this.display_name = properties["display_name"];
+        }
+
+        public static List<string> GetTemplate()
+        {
+            List<string> properties_to_get = new List<string>();
+            properties_to_get.Add("id");
+            properties_to_get.Add("display_name");
+
+            return properties_to_get;
+        }
     }
 }

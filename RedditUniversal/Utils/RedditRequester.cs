@@ -55,20 +55,30 @@ namespace RedditUniversal.Utils
             return GetLinkProperties(result);
         }
 
+        private List<Subreddit> GetSubredditProperties(string json)
+        {
+            List<string> properties_to_get = Subreddit.GetTemplate();
+            List<Dictionary<string, string>> properties = GetProperties(properties_to_get, json);
+            List<Subreddit> res = new List<Subreddit>();
+
+            foreach (Dictionary<string, string> subreddit in properties)
+            {
+                Subreddit curr_subreddit = new Subreddit(subreddit);
+                res.Add(curr_subreddit);
+            }
+
+            return res;
+        }
+
         private List<Link> GetLinkProperties(string json)
         {
-            List<string> properties_to_get = new List<string>();
-            properties_to_get.Add("id");
-            properties_to_get.Add("author");
-            properties_to_get.Add("thumbnail");
-            properties_to_get.Add("url");
-            properties_to_get.Add("title");
+            List<string> properties_to_get = Link.GetTemplate();
             List<Dictionary<string, string>> properties = GetProperties(properties_to_get, json);
             List<Link> res = new List<Link>();
 
             foreach (Dictionary<string, string> link in properties)
             {
-                Link curr_link = new Link(link["id"], link["author"], link["thumbnail"], link["title"], link["url"]);
+                Link curr_link = new Link(link);
                 res.Add(curr_link);
             }
 
