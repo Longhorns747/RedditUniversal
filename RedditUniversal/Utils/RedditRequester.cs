@@ -47,9 +47,14 @@ namespace RedditUniversal.Utils
             return subreddits;
         }
 
+        public async Task<List<Link>> GetHot(string parameters)
+        {
+            return await GetHot(new Subreddit("", ""), parameters);
+        }
+
         public async Task<List<Link>> GetHot(Subreddit target, string parameters)
         {
-            string url = "/r/" + target.display_name;
+            string url = (target.id.Equals("")) ? "/hot" : "/r/" + target.display_name + "/hot";
             RestClient listings_request = new RestClient(url, access_token);
             string result = await listings_request.MakeRequest(parameters);
             return GetLinkProperties(result);

@@ -38,7 +38,7 @@ namespace RedditUniversal
             access_token = (string)e.Parameter;
             requester = new RedditRequester(access_token);
             List<Subreddit> subreddits = await GetSubreddits();
-            GetHot(subreddits.First());
+            GetHot();
         }
 
         private async Task<List<Subreddit>> GetSubreddits()
@@ -46,9 +46,20 @@ namespace RedditUniversal
             return await requester.GetSubreddits("");
         }
 
+        private async void GetHot()
+        {
+            List<Link> links = await requester.GetHot("");
+            BuildUI(links);
+        }
+
         private async void GetHot(Subreddit target)
         {
             List<Link> links = await requester.GetHot(target, "");
+        }
+
+        private void BuildUI(List<Link> links)
+        {
+
         }
     }
 }
