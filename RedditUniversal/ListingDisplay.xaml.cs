@@ -34,7 +34,7 @@ namespace RedditUniversal
             this.InitializeComponent();
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             access_token = (string)e.Parameter;
             requester = new RedditRequester(access_token);
@@ -67,28 +67,34 @@ namespace RedditUniversal
             foreach(Link link in links)
             {
                 HyperlinkButton curr_button = new HyperlinkButton();
+                curr_button.HorizontalAlignment = HorizontalAlignment.Stretch;
 
                 StackPanel button_content = new StackPanel();
                 button_content.Orientation = Orientation.Horizontal;
+                button_content.HorizontalAlignment = HorizontalAlignment.Stretch;
 
                 Uri thumb;
                 if(Uri.TryCreate(link.url, UriKind.Absolute, out thumb))
                 {
                     BitmapImage myBitmapImage = new BitmapImage(thumb);
                     Image thumbnail = new Image();
-                    thumbnail.Width = 40;
-                    thumbnail.Height = 40;
+                    thumbnail.Width = 70;
+                    thumbnail.Height = 70;
                     thumbnail.Source = myBitmapImage;
                     button_content.Children.Add(thumbnail);
                 }
 
                 TextBlock caption = new TextBlock();
                 caption.Text = link.title;
+                caption.TextWrapping = TextWrapping.WrapWholeWords;
+                caption.Width = Window.Current.Bounds.Width - 70;
 
                 button_content.Children.Add(caption);
 
                 curr_button.NavigateUri = new Uri(link.url);
                 curr_button.Content = button_content;
+                curr_button.BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(192, 192, 192, 255));
+                curr_button.BorderThickness = new Thickness(1);
                 Grid.SetRow(curr_button, i);
                 i++;
 
