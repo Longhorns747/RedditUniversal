@@ -28,6 +28,8 @@ namespace RedditUniversal.Models
 
             //Set up thumbnail
             Image thumbnail = new Image();
+            thumbnail.Height = 1;
+            thumbnail.Width = 1;
             thumbnail.VerticalAlignment = VerticalAlignment.Center;
 
             Uri thumb;
