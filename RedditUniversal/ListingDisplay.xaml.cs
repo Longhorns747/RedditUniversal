@@ -40,6 +40,7 @@ namespace RedditUniversal
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             requester = new RedditRequester((string)e.Parameter);
+
             if (!(await requester.RetrieveAccessToken()))
             {
                 subreddits = await GetSubreddits();
@@ -94,6 +95,11 @@ namespace RedditUniversal
                 button.GetCaption().Width = button.Width - button.GetThumbnail().Width; //So much jank, so little time
 
             }
+        }
+
+        private void login_but_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MainPage));
         }
     }
 }

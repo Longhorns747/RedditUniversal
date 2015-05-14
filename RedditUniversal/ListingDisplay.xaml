@@ -7,11 +7,36 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollMode="Disabled">
-        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Name="LinkPanel" RequestedTheme="Dark">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+    <Grid RequestedTheme="Dark">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <Button Content="Menu" Height="33" Width="57" RequestedTheme="Dark" >
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Name="login_but" Text="Login" Click="login_but_Click"/>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+        
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                RedditUniversal
+            </TextBlock>
         </Grid>
-    </ScrollViewer>
+
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="1" Grid.Column="0" HorizontalScrollMode="Disabled">
+            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Name="LinkPanel" RequestedTheme="Dark">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
 </Page>

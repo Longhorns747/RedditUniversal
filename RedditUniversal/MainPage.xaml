@@ -17,7 +17,10 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         
-        <TextBlock x:Name="titleLabel" Text="RedditUniversal" Grid.Row="0" Grid.Column="0" TextAlignment="Center" RequestedTheme="Dark"></TextBlock>
+        <Grid Grid.Row="0" Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <TextBlock x:Name="titleLabel" Text="RedditUniversal" Grid.Row="0" Grid.Column="0" TextAlignment="Center" RequestedTheme="Dark" />
+        </Grid>
+        
         <WebView x:Name="web" NavigationStarting="web_NavStart" Grid.Row="1" Grid.Column="0" />
     </Grid>
 </Page>
