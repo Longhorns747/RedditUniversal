@@ -12,7 +12,7 @@ namespace RedditUniversal.Utils
 {
     class RedditRequester
     {
-        private string access_token;
+        string access_token;
 
         public RedditRequester(string access_token)
         {
@@ -87,6 +87,36 @@ namespace RedditUniversal.Utils
             {
                 Link curr_link = new Link(link);
                 res.Add(curr_link);
+            }
+
+            return res;
+        }
+
+        public async Task<bool> RetrieveAccessToken()
+        {
+            if (access_token.Equals(""))
+            {
+                access_token = await AppLogin();
+                return true;
+            }
+
+            return false;
+        }
+
+        private async Task<String> AppLogin()
+        {
+            RestClient login = new RestClient("https://www.reddit.com/api/v1/access_token", HttpVerb.POST, "");
+            string response = await login.MakeRequest();
+            JsonTextReader reader = new JsonTextReader(new StringReader(response));
+            string res = null;
+
+            while(reader.Read())
+            {
+                if(reader.Value != null && reader.Value.Equals("access_token"))
+                {
+                    reader.Read();
+                    res = (string)reader.Value;
+                }
             }
 
             return res;

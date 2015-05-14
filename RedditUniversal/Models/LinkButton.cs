@@ -49,12 +49,13 @@ namespace RedditUniversal.Models
             caption.Width = Window.Current.Bounds.Width - thumbnail.Width;
             caption.Padding = new Thickness(10);
             caption.VerticalAlignment = VerticalAlignment.Center;
+            caption.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(192, 192, 192, 255));
 
             button_content.Children.Add(caption);
 
             this.NavigateUri = new Uri(link.url);
             this.Content = button_content;
-            this.BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(192, 192, 192, 255));
+            this.BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(100, 100, 100, 255));
             this.BorderThickness = new Thickness(1);
         }
 

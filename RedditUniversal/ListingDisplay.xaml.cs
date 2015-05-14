@@ -39,9 +39,11 @@ namespace RedditUniversal
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            access_token = (string)e.Parameter;
-            requester = new RedditRequester(access_token);
-            subreddits = await GetSubreddits();
+            requester = new RedditRequester((string)e.Parameter);
+            if (!(await requester.RetrieveAccessToken()))
+            {
+                subreddits = await GetSubreddits();
+            }           
             GetHot();
         }
 
