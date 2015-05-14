@@ -73,11 +73,7 @@ namespace RedditUniversal
             foreach(Link link in links)
             {
                 LinkButton curr_button = new LinkButton(link);
-                Flyout link_viewer = new Flyout();
-                WebView view = new WebView();
-                view.Source = new Uri(link.url, UriKind.Absolute);
-                link_viewer.Content = view;
-                curr_button.Flyout = link_viewer;
+                curr_button.Click += new RoutedEventHandler(link_but_Click);
 
                 Grid.SetRow(curr_button, i);
                 i++;

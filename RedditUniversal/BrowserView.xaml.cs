@@ -32,5 +32,10 @@ namespace RedditUniversal
             string url = (string)e.Parameter;
             webViewer.Navigate(new Uri(url));
         }
+
+        private void back_button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(ListingDisplay), "");
+        }
     }
 }

@@ -18,6 +18,6 @@
         </Grid.ColumnDefinitions>
 
         <WebView x:Name="webViewer" Grid.Row="1" Grid.Column="0" />
-        <Button Content="Back"></Button>
+        <Button Name="back_button" Content="Back" Click="back_button_Click"></Button>
     </Grid>
 </Page>
