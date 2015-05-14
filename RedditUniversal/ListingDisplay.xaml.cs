@@ -23,7 +23,7 @@ using Windows.UI.Core;
 namespace RedditUniversal
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Page to view links from a subreddit
     /// </summary>
     public sealed partial class ListingDisplay : Page
     {
@@ -73,6 +73,7 @@ namespace RedditUniversal
             foreach(Link link in links)
             {
                 LinkButton curr_button = new LinkButton(link);
+                curr_button.Click += new RoutedEventHandler(link_but_Click);
                 Grid.SetRow(curr_button, i);
                 i++;
                 link_buttons.Add(curr_button);
@@ -93,13 +94,17 @@ namespace RedditUniversal
             {
                 button.Width = Window.Current.Bounds.Width;
                 button.GetCaption().Width = button.Width - button.GetThumbnail().Width; //So much jank, so little time
-
             }
         }
 
         private void login_but_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MainPage));
+        }
+
+        private void link_but_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(BrowserView), ((LinkButton)sender).link.url);
         }
     }
 }

@@ -10,9 +10,9 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace RedditUniversal.Models
 {
-    class LinkButton : HyperlinkButton
+    class LinkButton : Button
     {
-        Link link { get; set; }
+        public Link link { get; set; }
         public const int THUMBNAIL_SIZE = 70;
 
         public LinkButton(Link link)
@@ -25,7 +25,6 @@ namespace RedditUniversal.Models
             StackPanel button_content = new StackPanel();
             button_content.Orientation = Orientation.Horizontal;
             this.HorizontalContentAlignment = HorizontalAlignment.Stretch;
-
 
             //Set up thumbnail
             Image thumbnail = new Image();
@@ -53,7 +52,6 @@ namespace RedditUniversal.Models
 
             button_content.Children.Add(caption);
 
-            this.NavigateUri = new Uri(link.url);
             this.Content = button_content;
             this.BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(100, 100, 100, 255));
             this.BorderThickness = new Thickness(1);
