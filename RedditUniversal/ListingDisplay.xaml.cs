@@ -29,18 +29,19 @@ namespace RedditUniversal
     {
         string access_token = "";
         RedditRequester requester;
-        List<HyperlinkButton> link_buttons = new List<HyperlinkButton>();
+        List<LinkButton> link_buttons = new List<LinkButton>();
+        List<Subreddit> subreddits;
 
         public ListingDisplay()
         {
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             access_token = (string)e.Parameter;
             requester = new RedditRequester(access_token);
-            //List<Subreddit> subreddits = await GetSubreddits();
+            subreddits = await GetSubreddits();
             GetHot();
         }
 
@@ -85,10 +86,10 @@ namespace RedditUniversal
 
         private void Resize_Buttons(object sender, WindowSizeChangedEventArgs e)
         {
-            foreach(HyperlinkButton button in link_buttons)
+            foreach(LinkButton button in link_buttons)
             {
                 button.Width = Window.Current.Bounds.Width;
-                ((TextBlock)((StackPanel)button.Content).Children.Last()).Width = button.Width - 70; //So much jank, so little time
+                button.GetCaption().Width = button.Width - button.GetThumbnail().Width; //So much jank, so little time
 
             }
         }

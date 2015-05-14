@@ -13,6 +13,7 @@ namespace RedditUniversal.Models
     class LinkButton : HyperlinkButton
     {
         Link link { get; set; }
+        public const int THUMBNAIL_SIZE = 70;
 
         public LinkButton(Link link)
         {
@@ -25,23 +26,29 @@ namespace RedditUniversal.Models
             button_content.Orientation = Orientation.Horizontal;
             this.HorizontalContentAlignment = HorizontalAlignment.Stretch;
 
+
+            //Set up thumbnail
             Image thumbnail = new Image();
-            thumbnail.Width = 70;
-            thumbnail.Height = 70;
+            thumbnail.VerticalAlignment = VerticalAlignment.Center;
 
             Uri thumb;
             if (Uri.TryCreate(link.thumbnail, UriKind.Absolute, out thumb))
             {
                 BitmapImage myBitmapImage = new BitmapImage(thumb);
+                thumbnail.Width = THUMBNAIL_SIZE;
+                thumbnail.Height = THUMBNAIL_SIZE;
                 thumbnail.Source = myBitmapImage;
             }
 
             button_content.Children.Add(thumbnail);
 
+            //Set up caption
             TextBlock caption = new TextBlock();
             caption.Text = link.title;
             caption.TextWrapping = TextWrapping.WrapWholeWords;
-            caption.Width = Window.Current.Bounds.Width - 70;
+            caption.Width = Window.Current.Bounds.Width - thumbnail.Width;
+            caption.Padding = new Thickness(10);
+            caption.VerticalAlignment = VerticalAlignment.Center;
 
             button_content.Children.Add(caption);
 
@@ -49,6 +56,21 @@ namespace RedditUniversal.Models
             this.Content = button_content;
             this.BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(192, 192, 192, 255));
             this.BorderThickness = new Thickness(1);
+        }
+
+        public Image GetThumbnail()
+        {
+            return ((Image)((StackPanel)this.Content).Children.First());
+        }
+
+        public TextBlock GetCaption()
+        {
+            return ((TextBlock)((StackPanel)this.Content).Children.Last());
+        }
+
+        public int GetThumbSize()
+        {
+            return THUMBNAIL_SIZE;
         }
     }
 }
