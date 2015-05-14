@@ -22,6 +22,8 @@ namespace RedditUniversal
     /// </summary>
     public sealed partial class BrowserView : Page
     {
+        string access_token = "";
+
         public BrowserView()
         {
             this.InitializeComponent();
@@ -29,13 +31,18 @@ namespace RedditUniversal
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            string url = (string)e.Parameter;
+            string url = ((string)e.Parameter).Split(',')[0];
+            access_token = ((string)e.Parameter).Split(',')[1];
+
+            if (url.Contains("imgur"))
+                url += ".jpg";
+
             webViewer.Navigate(new Uri(url));
         }
 
         private void back_button_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ListingDisplay), "");
+            this.Frame.Navigate(typeof(ListingDisplay), access_token);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace RedditUniversal.Utils
 {
     class RedditRequester
     {
-        string access_token;
+        public string access_token { get; set; }
 
         public RedditRequester(string access_token)
         {

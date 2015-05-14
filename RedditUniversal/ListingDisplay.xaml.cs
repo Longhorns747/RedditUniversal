@@ -27,7 +27,6 @@ namespace RedditUniversal
     /// </summary>
     public sealed partial class ListingDisplay : Page
     {
-        string access_token = "";
         RedditRequester requester;
         List<LinkButton> link_buttons = new List<LinkButton>();
         List<Subreddit> subreddits;
@@ -105,7 +104,7 @@ namespace RedditUniversal
 
         private void link_but_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(BrowserView), ((LinkButton)sender).link.url);
+            this.Frame.Navigate(typeof(BrowserView), ((LinkButton)sender).link.url + "," + requester.access_token);
         }
     }
 }
