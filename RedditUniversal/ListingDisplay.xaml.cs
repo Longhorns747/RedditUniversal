@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Navigation;
 using RedditUniversal.Utils;
 using RedditUniversal.Models;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Core;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -28,6 +29,7 @@ namespace RedditUniversal
     {
         string access_token = "";
         RedditRequester requester;
+        List<HyperlinkButton> link_buttons = new List<HyperlinkButton>();
 
         public ListingDisplay()
         {
@@ -49,7 +51,7 @@ namespace RedditUniversal
 
         private async void GetHot()
         {
-            List<Link> links = await requester.GetHot("limit=10");
+            List<Link> links = await requester.GetHot("");
             Link after = links.Last();
             links.Remove(links.Last());
 
@@ -58,7 +60,7 @@ namespace RedditUniversal
 
         private async void GetHot(Subreddit target)
         {
-            List<Link> links = await requester.GetHot(target, "limit=10");
+            List<Link> links = await requester.GetHot(target, "");
         }
 
         private void BuildUI(List<Link> links)
@@ -66,43 +68,28 @@ namespace RedditUniversal
             int i = 0;
             foreach(Link link in links)
             {
-                HyperlinkButton curr_button = new HyperlinkButton();
-                curr_button.HorizontalAlignment = HorizontalAlignment.Stretch;
-
-                StackPanel button_content = new StackPanel();
-                button_content.Orientation = Orientation.Horizontal;
-                button_content.HorizontalAlignment = HorizontalAlignment.Stretch;
-
-                Uri thumb;
-                if(Uri.TryCreate(link.url, UriKind.Absolute, out thumb))
-                {
-                    BitmapImage myBitmapImage = new BitmapImage(thumb);
-                    Image thumbnail = new Image();
-                    thumbnail.Width = 70;
-                    thumbnail.Height = 70;
-                    thumbnail.Source = myBitmapImage;
-                    button_content.Children.Add(thumbnail);
-                }
-
-                TextBlock caption = new TextBlock();
-                caption.Text = link.title;
-                caption.TextWrapping = TextWrapping.WrapWholeWords;
-                caption.Width = Window.Current.Bounds.Width - 70;
-
-                button_content.Children.Add(caption);
-
-                curr_button.NavigateUri = new Uri(link.url);
-                curr_button.Content = button_content;
-                curr_button.BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(192, 192, 192, 255));
-                curr_button.BorderThickness = new Thickness(1);
+                LinkButton curr_button = new LinkButton(link);
                 Grid.SetRow(curr_button, i);
                 i++;
+                link_buttons.Add(curr_button);
 
                 RowDefinition row = new RowDefinition();
                 row.Height = GridLength.Auto;
 
                 LinkPanel.RowDefinitions.Add(row);
                 LinkPanel.Children.Add(curr_button);
+            }
+
+            Window.Current.SizeChanged += new WindowSizeChangedEventHandler(this.Resize_Buttons);
+        }
+
+        private void Resize_Buttons(object sender, WindowSizeChangedEventArgs e)
+        {
+            foreach(HyperlinkButton button in link_buttons)
+            {
+                button.Width = Window.Current.Bounds.Width;
+                ((TextBlock)((StackPanel)button.Content).Children.Last()).Width = button.Width - 70; //So much jank, so little time
+
             }
         }
     }
