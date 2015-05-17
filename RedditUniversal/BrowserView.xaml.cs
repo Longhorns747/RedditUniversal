@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Web.Http;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -34,10 +35,10 @@ namespace RedditUniversal
             string url = ((string)e.Parameter).Split(',')[0];
             access_token = ((string)e.Parameter).Split(',')[1];
 
-            if (url.Contains("imgur"))
-                url += ".jpg";
+            HttpRequestMessage webRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+            webRequest.Headers.UserAgent.Add(new Windows.Web.Http.Headers.HttpProductInfoHeaderValue("Mozilla/5.0 (Linux; <Android Version>; <Build Tag etc.>) AppleWebKit/<WebKit Rev> (KHTML, like Gecko) Chrome/<Chrome Rev> Mobile Safari/<WebKit Rev>"));
 
-            webViewer.Navigate(new Uri(url));
+            webViewer.NavigateWithHttpRequestMessage(webRequest);
         }
 
         private void back_button_Click(object sender, RoutedEventArgs e)
