@@ -38,6 +38,7 @@ namespace RedditUniversal
             HttpRequestMessage webRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
             webRequest.Headers.UserAgent.Add(new Windows.Web.Http.Headers.HttpProductInfoHeaderValue("Mozilla/5.0 (Linux; <Android Version>; <Build Tag etc.>) AppleWebKit/<WebKit Rev> (KHTML, like Gecko) Chrome/<Chrome Rev> Mobile Safari/<WebKit Rev>"));
 
+            webViewer.IsTapEnabled = false;
             webViewer.NavigateWithHttpRequestMessage(webRequest);
         }
 

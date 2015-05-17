@@ -31,6 +31,7 @@ namespace RedditUniversal
         List<LinkButton> link_buttons = new List<LinkButton>();
         List<Subreddit> subreddits;
         int num_links = 0;
+        static int max_count = 0;
 
         public ListingDisplay()
         {
@@ -46,7 +47,7 @@ namespace RedditUniversal
             {
                 subreddits = await GetSubreddits();
             }           
-            GetHot();
+            GetHot("");
         }
 
         private async Task<List<Subreddit>> GetSubreddits()
@@ -54,9 +55,9 @@ namespace RedditUniversal
             return await requester.GetSubreddits("");
         }
 
-        private async void GetHot()
+        private async void GetHot(string parameters)
         {
-            List<Link> links = await requester.GetHot("");
+            List<Link> links = await requester.GetHot("count=" + max_count + "&" + parameters);
             Link after = links.Last();
             links.Remove(links.Last());
 
@@ -65,7 +66,7 @@ namespace RedditUniversal
 
         private async void GetHot(Subreddit target)
         {
-            List<Link> links = await requester.GetHot(target, "");
+            List<Link> links = await requester.GetHot(target, "count=" + max_count);
             Link after = links.Last();
             links.Remove(links.Last());
 
@@ -81,6 +82,7 @@ namespace RedditUniversal
 
                 Grid.SetRow(curr_button, num_links);
                 num_links++;
+                max_count = (num_links > max_count) ? max_count + 1 : max_count;
                 link_buttons.Add(curr_button);
 
                 RowDefinition row = new RowDefinition();
@@ -90,7 +92,14 @@ namespace RedditUniversal
                 LinkPanel.Children.Add(curr_button);
             }
 
-            AddAfterButtonToUI(after);
+            if(num_links < max_count)
+            {
+                GetHot("after=" + after.after);
+            }
+            else
+            {
+                AddAfterButtonToUI(after);
+            }           
         }
 
         private void AddAfterButtonToUI(Link after)
@@ -110,7 +119,7 @@ namespace RedditUniversal
         private async void after_but_Click(object sender, RoutedEventArgs e)
         {
             AfterButton after_but = (AfterButton)sender;
-            List<Link> links = await requester.GetHot("after=" + after_but.after + "&count=" + num_links);
+            List<Link> links = await requester.GetHot("after=" + after_but.after + "&count=" + max_count);
             Link after = links.Last();
             links.Remove(links.Last());
             LinkPanel.Children.Remove(after_but);

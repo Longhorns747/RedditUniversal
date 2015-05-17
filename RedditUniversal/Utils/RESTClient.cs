@@ -79,7 +79,8 @@ namespace RedditUniversal.Utils
                 if(!access_token.Equals(""))
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", access_token);
 
-                client.DefaultRequestHeaders.Add("User-Agent", @"WindowsUniversal");
+                client.DefaultRequestHeaders.Add("User-Agent", "WindowsUniversal");
+                
                 HttpResponseMessage response = new HttpResponseMessage();
 
                 //Assume (for the moment) we are posting because we are logging in as application
