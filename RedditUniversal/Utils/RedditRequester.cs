@@ -92,15 +92,15 @@ namespace RedditUniversal.Utils
             return res;
         }
 
-        public async Task<bool> RetrieveAccessToken()
+        public async Task<bool> RetrieveUserAccessToken()
         {
             if (access_token.Equals(""))
             {
                 access_token = await AppLogin();
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         private async Task<String> AppLogin()

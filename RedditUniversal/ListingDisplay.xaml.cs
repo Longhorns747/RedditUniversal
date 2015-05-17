@@ -30,17 +30,19 @@ namespace RedditUniversal
         RedditRequester requester;
         List<LinkButton> link_buttons = new List<LinkButton>();
         List<Subreddit> subreddits;
+        int num_links = 0;
 
         public ListingDisplay()
         {
             this.InitializeComponent();
+            Window.Current.SizeChanged += new WindowSizeChangedEventHandler(this.Resize_Buttons);
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             requester = new RedditRequester((string)e.Parameter);
 
-            if (!(await requester.RetrieveAccessToken()))
+            if (await requester.RetrieveUserAccessToken())
             {
                 subreddits = await GetSubreddits();
             }           
@@ -58,24 +60,27 @@ namespace RedditUniversal
             Link after = links.Last();
             links.Remove(links.Last());
 
-            BuildUI(links);
+            AddLinksToUI(links, after);
         }
 
         private async void GetHot(Subreddit target)
         {
             List<Link> links = await requester.GetHot(target, "");
+            Link after = links.Last();
+            links.Remove(links.Last());
+
+            AddLinksToUI(links, after);
         }
 
-        private void BuildUI(List<Link> links)
+        private void AddLinksToUI(List<Link> links, Link after)
         {
-            int i = 0;
             foreach(Link link in links)
             {
                 LinkButton curr_button = new LinkButton(link);
                 curr_button.Click += new RoutedEventHandler(link_but_Click);
 
-                Grid.SetRow(curr_button, i);
-                i++;
+                Grid.SetRow(curr_button, num_links);
+                num_links++;
                 link_buttons.Add(curr_button);
 
                 RowDefinition row = new RowDefinition();
@@ -85,7 +90,32 @@ namespace RedditUniversal
                 LinkPanel.Children.Add(curr_button);
             }
 
-            Window.Current.SizeChanged += new WindowSizeChangedEventHandler(this.Resize_Buttons);
+            AddAfterButtonToUI(after);
+        }
+
+        private void AddAfterButtonToUI(Link after)
+        {
+            AfterButton after_but = new AfterButton(after.after);
+            after_but.Content = "More";
+            after_but.Click += new RoutedEventHandler(after_but_Click);
+            Grid.SetRow(after_but, num_links);
+
+            RowDefinition row = new RowDefinition();
+            row.Height = GridLength.Auto;
+
+            LinkPanel.RowDefinitions.Add(row);
+            LinkPanel.Children.Add(after_but);
+        }
+
+        private async void after_but_Click(object sender, RoutedEventArgs e)
+        {
+            AfterButton after_but = (AfterButton)sender;
+            List<Link> links = await requester.GetHot("after=" + after_but.after + "&count=" + num_links);
+            Link after = links.Last();
+            links.Remove(links.Last());
+            LinkPanel.Children.Remove(after_but);
+
+            AddLinksToUI(links, after);
         }
 
         private void Resize_Buttons(object sender, WindowSizeChangedEventArgs e)
