@@ -29,7 +29,6 @@ namespace RedditUniversal
     {
         RedditRequester requester;
         List<LinkButton> link_buttons = new List<LinkButton>();
-        List<Subreddit> subreddits;
         int num_links = 0;
         static int max_count = 0;
 
@@ -43,10 +42,7 @@ namespace RedditUniversal
         {
             requester = new RedditRequester((string)e.Parameter);
 
-            if (await requester.RetrieveUserAccessToken())
-            {
-                subreddits = await GetSubreddits();
-            }           
+            await requester.RetrieveUserAccessToken();        
             GetHot("");
         }
 
