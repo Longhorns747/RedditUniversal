@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RedditUniversal.ParameterModels
 {
+    /// <summary>
+    /// Class to package up parameters passed to the Comment view
+    /// </summary>
     class CommentViewParameters
     {
         public string access_token { get; set; }

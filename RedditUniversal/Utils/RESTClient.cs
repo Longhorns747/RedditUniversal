@@ -20,6 +20,9 @@ namespace RedditUniversal.Utils
         DELETE
     }
 
+    /// <summary>
+    /// Utility to make REST calls to the OAuth reddit URL
+    /// </summary>
     public class RestClient
     {
         const string BASE_URL = "https://oauth.reddit.com";
@@ -68,6 +71,11 @@ namespace RedditUniversal.Utils
             return await MakeRequest("");
         }
 
+        /// <summary>
+        /// Make a request with optional parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public async Task<string> MakeRequest(string parameters)
         {
             using (var client = new HttpClient())

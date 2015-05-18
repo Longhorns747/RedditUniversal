@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RedditUniversal.DataModels
 {
+    /// <summary>
+    /// Data model for a Comment, generated from a JSON response to the Reddit API
+    /// </summary>
     public class Comment
     {
         public string domain { get; set; }

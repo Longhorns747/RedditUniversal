@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RedditUniversal.DataModels
 {
+    /// <summary>
+    /// Data model for a Link, generated from a JSON response to the Reddit API
+    /// </summary>
     public class Link
     {
         public string domain { get; set; }

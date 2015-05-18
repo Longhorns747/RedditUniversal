@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RedditUniversal.DataModels
 {
+    /// <summary>
+    /// Data model for a subreddit
+    /// </summary>
     class Subreddit
     {
         public string id { get; }
@@ -23,6 +26,10 @@ namespace RedditUniversal.DataModels
             this.display_name = properties["display_name"];
         }
 
+        /// <summary>
+        /// Gets a List of properties to retrieve from a JSON response to create Subreddit instances
+        /// </summary>
+        /// <returns></returns>
         public static List<string> GetTemplate()
         {
             List<string> properties_to_get = new List<string>();

@@ -11,6 +11,9 @@ using Windows.Data.Html;
 
 namespace RedditUniversal.ViewModels
 {
+    /// <summary>
+    /// A button for a comment
+    /// </summary>
     class CommentButton : Button
     {
         public Comment comment { get; set; }

@@ -11,6 +11,9 @@ using RedditUniversal.DataModels;
 
 namespace RedditUniversal.ViewModels
 {
+    /// <summary>
+    /// A button for a link
+    /// </summary>
     class LinkButton : Button
     {
         public Link link { get; set; }

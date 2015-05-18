@@ -23,7 +23,7 @@ using Windows.UI.Core;
 namespace RedditUniversal
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// A page to view the comments of a reddit link
     /// </summary>
     public sealed partial class CommentsView : Page
     {
@@ -34,12 +34,19 @@ namespace RedditUniversal
         int num_comments = 0;
         List<CommentButton> comment_buttons = new List<CommentButton>();
 
+        /// <summary>
+        /// Adds the Window resize handler to resize all buttons when window is resized
+        /// </summary>
         public CommentsView()
         {
             this.InitializeComponent();
             Window.Current.SizeChanged += new WindowSizeChangedEventHandler(this.Resize_Buttons);
         }
 
+        /// <summary>
+        /// Unpackages parameters when this page is navigated to
+        /// </summary>
+        /// <param name="e">Must be of type CommentViewParameters</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             CommentViewParameters parameters = (CommentViewParameters)e.Parameter;
@@ -61,6 +68,11 @@ namespace RedditUniversal
             this.Frame.Navigate(typeof(BrowserView), new BrowserViewParameters(current_link, access_token, subreddit, logged_in));
         }
 
+        /// <summary>
+        /// Adds comments to UI by traversing through the comments tree
+        /// </summary>
+        /// <param name="comments"></param>
+        /// <param name="after">The ID of the next comment to get for the "more" button</param>
         private void AddCommentsToUI(List<Comment> comments, string after)
         {
             foreach(Comment comment in comments)
@@ -69,6 +81,11 @@ namespace RedditUniversal
             }
         }
 
+        /// <summary>
+        /// Traverses through the comments tree in "pre-order" fashion. Builds the buttons and adds to the UI along the way.
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <param name="depth">Maintain the depth of the current comment in the tree</param>
         private void comment_tree_traversal(Comment comment, int depth)
         {
             if (comment == null)
@@ -101,6 +118,11 @@ namespace RedditUniversal
             }
         }
 
+        /// <summary>
+        /// Resizes all buttons when window is resized
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Resize_Buttons(object sender, WindowSizeChangedEventArgs e)
         {
             foreach (CommentButton button in comment_buttons)

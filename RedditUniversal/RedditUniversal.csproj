@@ -104,7 +104,7 @@
     <Compile Include="DataModels\Comment.cs" />
     <Compile Include="ParameterModels\BrowserViewParameters.cs" />
     <Compile Include="ParameterModels\CommentViewParameters.cs" />
-    <Compile Include="ParameterModels\ListingDisplayParameters.cs" />
+    <Compile Include="ParameterModels\LinksDisplayParameters.cs" />
     <Compile Include="LinksDisplay.xaml.cs">
       <DependentUpon>LinksDisplay.xaml</DependentUpon>
     </Compile>

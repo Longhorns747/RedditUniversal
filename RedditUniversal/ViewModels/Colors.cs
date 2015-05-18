@@ -7,7 +7,10 @@ using Windows.UI.Xaml.Media;
 
 namespace RedditUniversal.ViewModels
 {
-    class Colors
+    /// <summary>
+    /// Static class to hold the values of colors used in my UI
+    /// </summary>
+    static class Colors
     {
         public static SolidColorBrush AuthorTextColor = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 51, 102, 153));
         public static SolidColorBrush BorderColor = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 100, 100, 100));

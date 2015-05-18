@@ -23,7 +23,7 @@ using RedditUniversal.DataModels;
 namespace RedditUniversal
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// A page that shows the content of a Reddit link
     /// </summary>
     public sealed partial class BrowserView : Page
     {
@@ -37,6 +37,10 @@ namespace RedditUniversal
             this.InitializeComponent();
         }
 
+        /// <summary>
+        /// Parses the parameters passed on when this page is navigated to
+        /// </summary>
+        /// <param name="e">Must be of type BrowserViewParameters</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             BrowserViewParameters parameters = (BrowserViewParameters)e.Parameter;
@@ -54,7 +58,7 @@ namespace RedditUniversal
 
         private void back_button_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ListingDisplay), new ListingDisplayParameters(subreddit, logged_in, access_token));
+            this.Frame.Navigate(typeof(LinksDisplay), new LinksDisplayParameters(subreddit, logged_in, access_token));
         }
 
         private void comments_button_Click(object sender, RoutedEventArgs e)

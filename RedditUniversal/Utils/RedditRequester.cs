@@ -10,6 +10,9 @@ using RedditUniversal.DataModels;
 
 namespace RedditUniversal.Utils
 {
+    /// <summary>
+    /// Level of abstraction above REST client for making specific Reddit API calls
+    /// </summary>
     class RedditRequester
     {
         public string access_token { get; set; }
@@ -19,6 +22,11 @@ namespace RedditUniversal.Utils
             this.access_token = access_token;
         }
 
+        /// <summary>
+        /// Gets the subscribed subreddits of the currently logged in user
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public async Task<List<Subreddit>> GetSubreddits(string parameters)
         {
             string url = "subreddits/mine/subscriber/";
@@ -48,11 +56,23 @@ namespace RedditUniversal.Utils
             return subreddits;
         }
 
+        /// <summary>
+        /// Gets the front page links from Reddit
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<Link>, string>> GetHot(string parameters)
         {
             return await GetHot(new Subreddit("", ""), parameters);
         }
 
+        /// <summary>
+        /// Gets the links from a specific subreddit from Reddit
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        
         public async Task<Tuple<List<Link>, string>> GetHot(Subreddit target, string parameters)
         {
             List<Link> links = new List<Link>();
@@ -71,6 +91,12 @@ namespace RedditUniversal.Utils
             return new Tuple<List<Link>, string>(links, link_tree.data.after);
         }
 
+        /// <summary>
+        /// Gets the comments for a particular link
+        /// </summary>
+        /// <param name="link"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<Comment>, string>> GetComments(Link link, string parameters)
         {
             List<Comment> comments = new List<Comment>();
@@ -90,6 +116,11 @@ namespace RedditUniversal.Utils
             return new Tuple<List<Comment>, string>(comments, comment_tree[1].data.after);
         }
 
+        /// <summary>
+        /// Retrieves the access token for either a user or the Application depending on the access_token set
+        /// when the requester object was instantiated
+        /// </summary>
+        /// <returns>Returns false if the access_token was for the Application (not logged in) or true if for a specific user (logged in)</returns>
         public async Task<bool> RetrieveUserAccessToken()
         {
             if (access_token.Equals(""))
@@ -101,6 +132,10 @@ namespace RedditUniversal.Utils
             return true;
         }
 
+        /// <summary>
+        /// Logs in for the application as opposed to a specific user
+        /// </summary>
+        /// <returns></returns>
         private async Task<String> AppLogin()
         {
             RestClient login = new RestClient("https://www.reddit.com/api/v1/access_token", HttpVerb.POST, "");

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace RedditUniversal.ParameterModels
 {
+    /// <summary>
+    /// Class to package up parameters passed to the browser view
+    /// </summary>
     class BrowserViewParameters
     {
         public Link current_link { get; set; }
