@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using RedditUniversal.Controllers;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=402347&clcid=0x409
@@ -81,7 +82,7 @@ namespace RedditUniversal
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                rootFrame.Navigate(typeof(ListingDisplay), e.Arguments);
+                rootFrame.Navigate(typeof(ListingDisplay), new ListingDisplayParameters("", false, ""));
             }
             // Ensure the current window is active
             Window.Current.Activate();

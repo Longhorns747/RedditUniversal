@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Navigation;
 using RedditUniversal.Utils;
 using RedditUniversal.Models;
 using Windows.UI.Xaml.Media.Imaging;
+using RedditUniversal.Controllers;
 using Windows.UI.Core;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -29,7 +30,10 @@ namespace RedditUniversal
     {
         RedditRequester requester;
         List<LinkButton> link_buttons = new List<LinkButton>();
+        List<Subreddit> subreddits;
         int num_links = 0;
+        bool logged_in = false;
+        string current_subreddit = "";
         static int max_count = 0;
 
         public ListingDisplay()
@@ -40,9 +44,19 @@ namespace RedditUniversal
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            requester = new RedditRequester((string)e.Parameter);
+            ListingDisplayParameters parameters = (ListingDisplayParameters)(e.Parameter);
+            requester = new RedditRequester(parameters.access_token);
 
-            await requester.RetrieveUserAccessToken();        
+            await requester.RetrieveUserAccessToken();
+
+            if (parameters.logged_in)
+                subreddits = await GetSubreddits();
+
+            logged_in = parameters.logged_in;
+
+            current_subreddit = (parameters.subreddit.Equals("")) ? "Front Page" : parameters.subreddit;
+            current_subreddit_label.Text = current_subreddit;
+
             GetHot("");
         }
 

@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using RedditUniversal.Controllers;
 using Windows.Web.Http;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -44,7 +45,7 @@ namespace RedditUniversal
 
         private void back_button_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ListingDisplay), access_token);
+            this.Frame.Navigate(typeof(ListingDisplay), new ListingDisplayParameters("", false, access_token));
         }
     }
 }
