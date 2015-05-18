@@ -41,6 +41,8 @@ namespace RedditUniversal
         {
             this.InitializeComponent();
             Window.Current.SizeChanged += new WindowSizeChangedEventHandler(this.Resize_Buttons);
+            Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
+            Application.Current.Resuming += new EventHandler<Object>(App_Resuming);
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -154,6 +156,20 @@ namespace RedditUniversal
         private void link_but_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(BrowserView), new BrowserViewParameters(((LinkButton)sender).link, requester.access_token, current_subreddit, logged_in));
+        }
+
+        private void App_Suspending(Object sender, Windows.ApplicationModel.SuspendingEventArgs e)
+        {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            localSettings.Values["access_token"] = requester.access_token;
+            localSettings.Values["logged_in"] = logged_in;
+        }
+
+        private void App_Resuming(Object sender, Object e)
+        {
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            requester = new RedditRequester((string)localSettings.Values["access_token"]);
+            logged_in = (bool)localSettings.Values["logged_in"];
         }
     }
 }

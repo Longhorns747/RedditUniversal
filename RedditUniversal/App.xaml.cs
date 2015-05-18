@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using RedditUniversal.ParameterModels;
 using Windows.UI.Xaml.Navigation;
+using RedditUniversal.Utils;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=402347&clcid=0x409
 
@@ -82,7 +83,11 @@ namespace RedditUniversal
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                rootFrame.Navigate(typeof(ListingDisplay), new ListingDisplayParameters("", false, ""));
+                Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                string access_token = (string)localSettings.Values["access_token"];
+                bool logged_in = (bool)localSettings.Values["logged_in"];
+
+                rootFrame.Navigate(typeof(ListingDisplay), new ListingDisplayParameters("", logged_in, access_token));
             }
             // Ensure the current window is active
             Window.Current.Activate();
