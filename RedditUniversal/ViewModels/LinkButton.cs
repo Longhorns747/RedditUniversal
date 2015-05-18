@@ -7,8 +7,9 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using RedditUniversal.DataModels;
 
-namespace RedditUniversal.Models
+namespace RedditUniversal.ViewModels
 {
     class LinkButton : Button
     {

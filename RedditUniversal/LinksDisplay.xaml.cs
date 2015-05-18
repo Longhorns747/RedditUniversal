@@ -14,10 +14,11 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using RedditUniversal.Utils;
-using RedditUniversal.Models;
+using RedditUniversal.DataModels;
 using Windows.UI.Xaml.Media.Imaging;
 using RedditUniversal.Controllers;
 using Windows.UI.Core;
+using RedditUniversal.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -67,23 +68,23 @@ namespace RedditUniversal
 
         private async void GetHot(string parameters)
         {
-            List<Link> links = await requester.GetHot("count=" + max_count + "&" + parameters);
-            Link after = links.Last();
-            links.Remove(links.Last());
+            Tuple<List<Link>, string> result = await requester.GetHot("count=" + max_count + "&" + parameters);
+            List<Link> links = result.Item1;
+            string after = result.Item2;
 
             AddLinksToUI(links, after);
         }
 
         private async void GetHot(Subreddit target)
         {
-            List<Link> links = await requester.GetHot(target, "count=" + max_count);
-            Link after = links.Last();
-            links.Remove(links.Last());
+            Tuple<List<Link>, string> result = await requester.GetHot(target, "count=" + max_count);
+            List<Link> links = result.Item1;
+            string after = result.Item2;
 
             AddLinksToUI(links, after);
         }
 
-        private void AddLinksToUI(List<Link> links, Link after)
+        private void AddLinksToUI(List<Link> links, string after)
         {
             foreach(Link link in links)
             {
@@ -104,7 +105,7 @@ namespace RedditUniversal
 
             if(num_links < max_count)
             {
-                GetHot("after=" + after.after);
+                GetHot("after=" + after);
             }
             else
             {
@@ -112,9 +113,9 @@ namespace RedditUniversal
             }           
         }
 
-        private void AddAfterButtonToUI(Link after)
+        private void AddAfterButtonToUI(string after)
         {
-            AfterButton after_but = new AfterButton(after.after);
+            AfterButton after_but = new AfterButton(after);
             after_but.Content = "More";
             after_but.Click += new RoutedEventHandler(after_but_Click);
             Grid.SetRow(after_but, num_links);
@@ -129,10 +130,9 @@ namespace RedditUniversal
         private async void after_but_Click(object sender, RoutedEventArgs e)
         {
             AfterButton after_but = (AfterButton)sender;
-            List<Link> links = await requester.GetHot("after=" + after_but.after + "&count=" + max_count);
-            Link after = links.Last();
-            links.Remove(links.Last());
-            LinkPanel.Children.Remove(after_but);
+            Tuple<List<Link>, string> result = await requester.GetHot("after=" + after_but.after + "&count=" + max_count);
+            List<Link> links = result.Item1;
+            string after = result.Item2;
 
             AddLinksToUI(links, after);
         }

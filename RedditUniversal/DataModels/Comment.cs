@@ -10,7 +10,7 @@ namespace RedditUniversal.DataModels
     {
         public string domain { get; set; }
         public object banned_by { get; set; }
-        public MediaEmbed media_embed { get; set; }
+        public CommentMediaEmbed media_embed { get; set; }
         public string subreddit { get; set; }
         public object selftext_html { get; set; }
         public string selftext { get; set; }
@@ -37,7 +37,7 @@ namespace RedditUniversal.DataModels
         public object link_flair_css_class { get; set; }
         public object author_flair_css_class { get; set; }
         public int downs { get; set; }
-        public SecureMediaEmbed secure_media_embed { get; set; }
+        public CommentSecureMediaEmbed secure_media_embed { get; set; }
         public bool saved { get; set; }
         public object removal_reason { get; set; }
         public bool stickied { get; set; }
@@ -62,5 +62,33 @@ namespace RedditUniversal.DataModels
         public string body { get; set; }
         public string body_html { get; set; }
         public bool? score_hidden { get; set; }
+    }
+
+    public class CommentMediaEmbed
+    {
+    }
+
+    public class CommentSecureMediaEmbed
+    {
+    }
+
+    public class CommentChild
+    {
+        public string kind { get; set; }
+        public Comment data { get; set; }
+    }
+
+    public class CommentData
+    {
+        public string modhash { get; set; }
+        public List<CommentChild> children { get; set; }
+        public string after { get; set; }
+        public string before { get; set; }
+    }
+
+    public class CommentTree
+    {
+        public string kind { get; set; }
+        public CommentData data { get; set; }
     }
 }

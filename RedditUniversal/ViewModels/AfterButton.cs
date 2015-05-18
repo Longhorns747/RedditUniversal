@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 
-namespace RedditUniversal.Models
+namespace RedditUniversal.ViewModels
 {
     class AfterButton : Button
     {

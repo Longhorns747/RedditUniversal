@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditUniversal.Models
+namespace RedditUniversal.DataModels
 {
     class Subreddit
     {

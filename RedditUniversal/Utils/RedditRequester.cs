@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RedditUniversal.Utils;
-using RedditUniversal.Models;
 using System.IO;
 using RedditUniversal.DataModels;
 
@@ -49,30 +48,44 @@ namespace RedditUniversal.Utils
             return subreddits;
         }
 
-        public async Task<List<Link>> GetHot(string parameters)
+        public async Task<Tuple<List<Link>, string>> GetHot(string parameters)
         {
             return await GetHot(new Subreddit("", ""), parameters);
         }
 
-        public async Task<List<Link>> GetHot(Subreddit target, string parameters)
+        public async Task<Tuple<List<Link>, string>> GetHot(Subreddit target, string parameters)
         {
+            List<Link> links = new List<Link>();
             string url = (target.id.Equals("")) ? "/hot" : "/r/" + target.display_name + "/hot";
             url = (parameters.Equals("")) ? url : url + "?" + parameters;
             RestClient listings_request = new RestClient(url, access_token);
             string result = await listings_request.MakeRequest(parameters);
-            return GetLinkProperties(result);
+
+            LinkTree link_tree = JsonConvert.DeserializeObject<LinkTree>(result);
+
+            foreach (LinkChild link in link_tree.data.children)
+            {
+                links.Add(link.data);
+            }
+
+            return new Tuple<List<Link>, string>(links, link_tree.data.after);
         }
 
-        public async Task<List<Comment>> GetComments(Link link, string parameters)
+        public async Task<Tuple<List<Comment>, string>> GetComments(Link link, string parameters)
         {
             List<Comment> comments = new List<Comment>();
             string url = "/comments/" + link.id;
             RestClient comments_request = new RestClient(url, access_token);
             string result = await comments_request.MakeRequest();
 
-            List<CommentTree> m = JsonConvert.DeserializeObject<List<CommentTree>>(result);
+            List<CommentTree> comment_tree = JsonConvert.DeserializeObject<List<CommentTree>>(result);
 
-            return comments;
+            foreach (CommentChild comment in comment_tree[1].data.children)
+            {
+                comments.Add(comment.data);
+            }
+
+            return new Tuple<List<Comment>, string>(comments, comment_tree[1].data.after);
         }
 
         private List<Subreddit> GetSubredditProperties(string json)
@@ -85,21 +98,6 @@ namespace RedditUniversal.Utils
             {
                 Subreddit curr_subreddit = new Subreddit(subreddit);
                 res.Add(curr_subreddit);
-            }
-
-            return res;
-        }
-
-        private List<Link> GetLinkProperties(string json)
-        {
-            List<string> properties_to_get = Link.GetTemplate();
-            List<Dictionary<string, string>> properties = GetProperties(properties_to_get, json);
-            List<Link> res = new List<Link>();
-
-            foreach (Dictionary<string, string> link in properties)
-            {
-                Link curr_link = new Link(link);
-                res.Add(curr_link);
             }
 
             return res;

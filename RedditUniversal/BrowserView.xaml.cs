@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using RedditUniversal.Controllers;
 using Windows.Web.Http;
-using RedditUniversal.Models;
+using RedditUniversal.ViewModels;
 using RedditUniversal.Utils;
 using RedditUniversal.DataModels;
 
@@ -60,7 +60,9 @@ namespace RedditUniversal
         private async void comments_button_Click(object sender, RoutedEventArgs e)
         {
             RedditRequester requester = new RedditRequester(access_token);
-            List<Comment> comments = await requester.GetComments(current_link, "");
+            Tuple<List<Comment>, string> result = await requester.GetComments(current_link, "");
+            List<Comment> comments = result.Item1;
+            string after = result.Item2;
         }
     }
 }

@@ -102,7 +102,6 @@
       <DependentUpon>CommentsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataModels\Comment.cs" />
-    <Compile Include="DataModels\CommentTree.cs" />
     <Compile Include="ParameterModels\BrowserViewParameters.cs" />
     <Compile Include="ParameterModels\ListingDisplayParameters.cs" />
     <Compile Include="LinksDisplay.xaml.cs">
