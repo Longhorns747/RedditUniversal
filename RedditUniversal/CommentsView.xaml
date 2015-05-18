@@ -21,7 +21,7 @@
             <Button Name="back_button" Content="Back" Click="back_button_Click"/>
         </Grid>
         
-        <Grid x:Name="comment_grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Grid.Row="1" Grid.Column="0"/>
+        <Grid x:Name="comment_grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" ScrollViewer.VerticalScrollMode="Enabled" Grid.Row="1" Grid.Column="0"/>
         
     </Grid>
 </Page>

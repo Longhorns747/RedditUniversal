@@ -7,21 +7,19 @@ using System.Threading.Tasks;
 
 namespace RedditUniversal.ParameterModels
 {
-    class BrowserViewParameters
+    class CommentViewParameters
     {
-        public Link current_link { get; set; }
         public string access_token { get; set; }
+        public Link current_link { get; set; }
         public bool logged_in { get; set; }
         public string subreddit { get; set; }
 
-        public BrowserViewParameters(Link current_link, string access_token, string subreddit, bool logged_in)
+        public CommentViewParameters(string access_token, Link current_link, bool logged_in, string subreddit)
         {
-            this.current_link = current_link;
             this.access_token = access_token;
+            this.current_link = current_link;
             this.logged_in = logged_in;
             this.subreddit = subreddit;
         }
-
-        public BrowserViewParameters() { }
     }
 }

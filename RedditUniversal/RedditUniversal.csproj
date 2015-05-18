@@ -103,6 +103,7 @@
     </Compile>
     <Compile Include="DataModels\Comment.cs" />
     <Compile Include="ParameterModels\BrowserViewParameters.cs" />
+    <Compile Include="ParameterModels\CommentViewParameters.cs" />
     <Compile Include="ParameterModels\ListingDisplayParameters.cs" />
     <Compile Include="LinksDisplay.xaml.cs">
       <DependentUpon>LinksDisplay.xaml</DependentUpon>
@@ -112,6 +113,7 @@
     </Compile>
     <Compile Include="ViewModels\AfterButton.cs" />
     <Compile Include="DataModels\Link.cs" />
+    <Compile Include="ViewModels\CommentButton.cs" />
     <Compile Include="ViewModels\LinkButton.cs" />
     <Compile Include="DataModels\Subreddit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

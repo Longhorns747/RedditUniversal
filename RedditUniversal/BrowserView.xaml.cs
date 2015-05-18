@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using RedditUniversal.Controllers;
+using RedditUniversal.ParameterModels;
 using Windows.Web.Http;
 using RedditUniversal.ViewModels;
 using RedditUniversal.Utils;
@@ -57,12 +57,9 @@ namespace RedditUniversal
             this.Frame.Navigate(typeof(ListingDisplay), new ListingDisplayParameters(subreddit, logged_in, access_token));
         }
 
-        private async void comments_button_Click(object sender, RoutedEventArgs e)
+        private void comments_button_Click(object sender, RoutedEventArgs e)
         {
-            RedditRequester requester = new RedditRequester(access_token);
-            Tuple<List<Comment>, string> result = await requester.GetComments(current_link, "");
-            List<Comment> comments = result.Item1;
-            string after = result.Item2;
+            this.Frame.Navigate(typeof(CommentsView), new CommentViewParameters(access_token, current_link, logged_in, subreddit));
         }
     }
 }

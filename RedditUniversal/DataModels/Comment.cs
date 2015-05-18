@@ -56,7 +56,7 @@ namespace RedditUniversal.DataModels
         public object num_reports { get; set; }
         public int ups { get; set; }
         public string link_id { get; set; }
-        public object replies { get; set; }
+        public CommentTree replies { get; set; }
         public string parent_id { get; set; }
         public int? controversiality { get; set; }
         public string body { get; set; }

@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Navigation;
 using RedditUniversal.Utils;
 using RedditUniversal.DataModels;
 using Windows.UI.Xaml.Media.Imaging;
-using RedditUniversal.Controllers;
+using RedditUniversal.ParameterModels;
 using Windows.UI.Core;
 using RedditUniversal.ViewModels;
 

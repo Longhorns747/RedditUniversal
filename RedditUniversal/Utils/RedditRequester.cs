@@ -85,6 +85,8 @@ namespace RedditUniversal.Utils
                 comments.Add(comment.data);
             }
 
+            comments.Remove(comments.Last());
+
             return new Tuple<List<Comment>, string>(comments, comment_tree[1].data.after);
         }
 
