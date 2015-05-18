@@ -25,6 +25,8 @@ namespace RedditUniversal
     public sealed partial class BrowserView : Page
     {
         string access_token = "";
+        bool logged_in;
+        string subreddit;
 
         public BrowserView()
         {
@@ -33,8 +35,11 @@ namespace RedditUniversal
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            string url = ((string)e.Parameter).Split(',')[0];
-            access_token = ((string)e.Parameter).Split(',')[1];
+            BrowserViewParameters parameters = (BrowserViewParameters)e.Parameter;
+            string url = parameters.url;
+            access_token = parameters.access_token;
+            logged_in = parameters.logged_in;
+            subreddit = parameters.subreddit;
 
             HttpRequestMessage webRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
             webRequest.Headers.UserAgent.Add(new Windows.Web.Http.Headers.HttpProductInfoHeaderValue("Mozilla/5.0 (Linux; <Android Version>; <Build Tag etc.>) AppleWebKit/<WebKit Rev> (KHTML, like Gecko) Chrome/<Chrome Rev> Mobile Safari/<WebKit Rev>"));
@@ -45,7 +50,7 @@ namespace RedditUniversal
 
         private void back_button_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ListingDisplay), new ListingDisplayParameters("", false, access_token));
+            this.Frame.Navigate(typeof(ListingDisplay), new ListingDisplayParameters(subreddit, logged_in, access_token));
         }
     }
 }

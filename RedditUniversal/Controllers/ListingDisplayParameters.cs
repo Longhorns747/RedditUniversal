@@ -20,9 +20,6 @@ namespace RedditUniversal.Controllers
             this.access_token = access_token;
         }
 
-        public ListingDisplayParameters()
-        {
-
-        }
+        public ListingDisplayParameters() { }
     }
 }
