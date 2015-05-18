@@ -24,8 +24,40 @@ namespace RedditUniversal.ViewModels
             this.Width = Window.Current.Bounds.Width;
 
             StackPanel button_content = new StackPanel();
-            button_content.Orientation = Orientation.Horizontal;
+            button_content.Orientation = Orientation.Vertical;
             this.HorizontalContentAlignment = HorizontalAlignment.Stretch;
+
+            //Set up author bar
+            StackPanel author_bar = new StackPanel();
+            author_bar.Orientation = Orientation.Horizontal;
+
+            TextBlock author = new TextBlock();
+            author.Text = link.author;
+            author.FontSize = 12;
+            author.Foreground = Colors.AuthorTextColor;
+            author_bar.Children.Add(author);
+
+            TextBlock subreddit = new TextBlock();
+            subreddit.Text = link.subreddit;
+            subreddit.FontSize = 12;
+            subreddit.Foreground = Colors.NeutralColor;
+            subreddit.Padding = new Thickness(2, 0, 0, 0);
+            author_bar.Children.Add(subreddit);
+
+            TextBlock score = new TextBlock();
+            score.Text = link.score.ToString();
+            score.FontSize = 12;
+            score.Padding = new Thickness(2, 0, 0, 0);
+            score.Foreground = Colors.NeutralColor;
+            score.HorizontalAlignment = HorizontalAlignment.Right;
+            author_bar.Children.Add(score);
+
+            button_content.Children.Add(author_bar);
+
+            //Set up caption bar
+            StackPanel caption_bar = new StackPanel();
+            caption_bar.Orientation = Orientation.Horizontal;
+            caption_bar.HorizontalAlignment = HorizontalAlignment.Stretch;
 
             //Set up thumbnail
             Image thumbnail = new Image();
@@ -42,7 +74,7 @@ namespace RedditUniversal.ViewModels
                 thumbnail.Source = myBitmapImage;
             }
 
-            button_content.Children.Add(thumbnail);
+            caption_bar.Children.Add(thumbnail);
 
             //Set up caption
             TextBlock caption = new TextBlock();
@@ -52,7 +84,9 @@ namespace RedditUniversal.ViewModels
             caption.Padding = new Thickness(10);
             caption.VerticalAlignment = VerticalAlignment.Center;
 
-            button_content.Children.Add(caption);
+            caption_bar.Children.Add(caption);
+
+            button_content.Children.Add(caption_bar);
 
             this.Content = button_content;
             this.BorderBrush = Colors.BorderColor;

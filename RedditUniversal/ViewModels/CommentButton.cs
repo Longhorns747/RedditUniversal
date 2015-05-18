@@ -11,17 +11,18 @@ using Windows.Data.Html;
 
 namespace RedditUniversal.ViewModels
 {
-    class CommentButton : HyperlinkButton
+    class CommentButton : Button
     {
         public Comment comment { get; set; }
         public int depth;
         public const int CHILD_PADDING = 10;
+        public Uri url;
 
         public CommentButton(Comment comment, int depth)
         {
             this.comment = comment;
             this.depth = depth;
-            this.NavigateUri = new Uri("http://www.reddit.com/r/" + comment.subreddit + "/comments/" + comment.link_id.Substring(3) + "?comment=" + comment.id);
+            url = new Uri("http://www.reddit.com/r/" + comment.subreddit + "/comments/" + comment.link_id.Substring(3) + "?comment=" + comment.id);
 
             this.HorizontalAlignment = HorizontalAlignment.Stretch;
             this.Width = Window.Current.Bounds.Width - CHILD_PADDING * depth;
@@ -34,7 +35,6 @@ namespace RedditUniversal.ViewModels
             //Set up author bar
             StackPanel author_bar = new StackPanel();
             author_bar.Orientation = Orientation.Horizontal;
-            this.HorizontalAlignment = HorizontalAlignment.Stretch;
 
             TextBlock author = new TextBlock();
             author.Text = comment.author;

@@ -22,7 +22,7 @@
         </Grid>
 
         <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="1" Grid.Column="0" HorizontalScrollMode="Disabled">
-            <Grid x:Name="comment_grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Grid.Row="1" Grid.Column="0"/>
+            <Grid x:Name="comment_grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" Grid.Row="1" Grid.Column="0"/>
         </ScrollViewer>
 
     </Grid>
