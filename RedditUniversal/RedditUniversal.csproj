@@ -113,6 +113,7 @@
     </Compile>
     <Compile Include="ViewModels\AfterButton.cs" />
     <Compile Include="DataModels\Link.cs" />
+    <Compile Include="ViewModels\Colors.cs" />
     <Compile Include="ViewModels\CommentButton.cs" />
     <Compile Include="ViewModels\LinkButton.cs" />
     <Compile Include="DataModels\Subreddit.cs" />

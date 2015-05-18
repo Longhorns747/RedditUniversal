@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.Data.Html;
 
 namespace RedditUniversal.ViewModels
 {
-    class CommentButton : Button
+    class CommentButton : HyperlinkButton
     {
         public Comment comment { get; set; }
         public int depth;
@@ -20,30 +21,58 @@ namespace RedditUniversal.ViewModels
         {
             this.comment = comment;
             this.depth = depth;
+            this.NavigateUri = new Uri("http://www.reddit.com/r/" + comment.subreddit + "/comments/" + comment.link_id.Substring(3) + "?comment=" + comment.id);
 
             this.HorizontalAlignment = HorizontalAlignment.Stretch;
-            this.Width = Window.Current.Bounds.Width;
-            this.Padding = new Thickness(CHILD_PADDING * depth, 0, 0, 0);
+            this.Width = Window.Current.Bounds.Width - CHILD_PADDING * depth;
+            this.Margin = new Thickness(CHILD_PADDING * depth, 0, 0, 0);
 
             StackPanel button_content = new StackPanel();
-            button_content.Orientation = Orientation.Horizontal;
+            button_content.Orientation = Orientation.Vertical;
             this.HorizontalContentAlignment = HorizontalAlignment.Stretch;
+
+            //Set up author bar
+            StackPanel author_bar = new StackPanel();
+            author_bar.Orientation = Orientation.Horizontal;
+            this.HorizontalAlignment = HorizontalAlignment.Stretch;
+
+            TextBlock author = new TextBlock();
+            author.Text = comment.author;
+            author.FontSize = 12;
+            author.Foreground = Colors.AuthorTextColor;
+            author_bar.Children.Add(author);
+
+            TextBlock score = new TextBlock();
+            score.Text = (comment.score >= 0) ? "+" + comment.score : "-" + comment.score;
+            score.FontSize = 12;
+            score.Padding = new Thickness(2, 0, 0, 0);
+            score.Foreground = (comment.score >= 0) ? Colors.UpvoteColor : Colors.DownvoteColor;
+            score.HorizontalAlignment = HorizontalAlignment.Right;
+            author_bar.Children.Add(score);
+
+            button_content.Children.Add(author_bar);
 
             //Set up caption
             TextBlock caption = new TextBlock();
-            caption.Text = (comment.body != null) ? comment.body : comment.body_html;
-            caption.TextWrapping = TextWrapping.WrapWholeWords;
+            caption.Text = comment.body;
+            caption.TextWrapping = TextWrapping.Wrap;
+            caption.Foreground = Colors.TextColor;
             caption.Width = Window.Current.Bounds.Width - CHILD_PADDING * depth;
             button_content.Children.Add(caption);
 
             this.Content = button_content;
-            this.BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(100, 100, 100, 255));
+            this.BorderBrush = Colors.BorderColor;
             this.BorderThickness = new Thickness(1);
         }
 
         public TextBlock GetCaption()
         {
             return ((TextBlock)((StackPanel)this.Content).Children.Last());
+        }
+
+        public int GetChildPadding()
+        {
+            return CHILD_PADDING;
         }
     }
 }

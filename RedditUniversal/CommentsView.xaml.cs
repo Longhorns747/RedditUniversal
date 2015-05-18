@@ -65,7 +65,7 @@ namespace RedditUniversal
         {
             foreach(Comment comment in comments)
             {
-                comment_tree_traversal(comment, 1);
+                comment_tree_traversal(comment, 0);
             }
         }
 
@@ -106,7 +106,7 @@ namespace RedditUniversal
             foreach (CommentButton button in comment_buttons)
             {
                 button.Width = Window.Current.Bounds.Width;
-                button.GetCaption().Width = Window.Current.Bounds.Width;
+                button.GetCaption().Width = Window.Current.Bounds.Width - button.depth * button.GetChildPadding();
             }
         }
     }
