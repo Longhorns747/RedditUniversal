@@ -33,7 +33,7 @@ namespace RedditUniversal.ViewModels
             TextBlock caption = new TextBlock();
             caption.Text = (comment.body != null) ? comment.body : comment.body_html;
             caption.TextWrapping = TextWrapping.WrapWholeWords;
-            caption.Width = Window.Current.Bounds.Width;
+            caption.Width = Window.Current.Bounds.Width - CHILD_PADDING * depth;
             button_content.Children.Add(caption);
 
             this.Content = button_content;
