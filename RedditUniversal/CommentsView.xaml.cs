@@ -63,9 +63,21 @@ namespace RedditUniversal
 
         private void AddCommentsToUI(List<Comment> comments, string after)
         {
-            foreach (Comment comment in comments)
+            foreach(Comment comment in comments)
             {
-                CommentButton curr_button = new CommentButton(comment, 1);
+                comment_tree_traversal(comment, 1);
+            }
+        }
+
+        private void comment_tree_traversal(Comment comment, int depth)
+        {
+            if (comment == null)
+            {
+                return;
+            }
+            else
+            {
+                CommentButton curr_button = new CommentButton(comment, depth);
 
                 Grid.SetRow(curr_button, num_comments);
                 num_comments++;
@@ -76,6 +88,16 @@ namespace RedditUniversal
 
                 comment_grid.RowDefinitions.Add(row);
                 comment_grid.Children.Add(curr_button);
+
+                if (comment.replies != null)
+                {
+                    comment.replies.data.children.Remove(comment.replies.data.children.Last());
+                    foreach (CommentChild child_comment in comment.replies.data.children)
+                    {
+                        int next_depth = depth + 1;
+                        comment_tree_traversal(child_comment.data, next_depth);
+                    }
+                }                
             }
         }
 
