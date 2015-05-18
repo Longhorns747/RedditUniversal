@@ -88,21 +88,6 @@ namespace RedditUniversal.Utils
             return new Tuple<List<Comment>, string>(comments, comment_tree[1].data.after);
         }
 
-        private List<Subreddit> GetSubredditProperties(string json)
-        {
-            List<string> properties_to_get = Subreddit.GetTemplate();
-            List<Dictionary<string, string>> properties = GetProperties(properties_to_get, json);
-            List<Subreddit> res = new List<Subreddit>();
-
-            foreach (Dictionary<string, string> subreddit in properties)
-            {
-                Subreddit curr_subreddit = new Subreddit(subreddit);
-                res.Add(curr_subreddit);
-            }
-
-            return res;
-        }
-
         public async Task<bool> RetrieveUserAccessToken()
         {
             if (access_token.Equals(""))
@@ -121,9 +106,9 @@ namespace RedditUniversal.Utils
             JsonTextReader reader = new JsonTextReader(new StringReader(response));
             string res = null;
 
-            while(reader.Read())
+            while (reader.Read())
             {
-                if(reader.Value != null && reader.Value.Equals("access_token"))
+                if (reader.Value != null && reader.Value.Equals("access_token"))
                 {
                     reader.Read();
                     res = (string)reader.Value;
@@ -131,50 +116,6 @@ namespace RedditUniversal.Utils
             }
 
             return res;
-        }
-
-        private List<Dictionary<string, string>> GetProperties(List<string> properties, string json)
-        {
-            List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
-            JsonTextReader reader = new JsonTextReader(new StringReader(json));
-
-            while (reader.Read())
-            {
-                if (reader.Value != null && reader.Value.Equals(properties.First()))
-                {
-                    Dictionary<string, string> property_dic = new Dictionary<string, string>();
-
-                    reader.Read();
-                    property_dic[properties.First()] = (string)reader.Value;
-                    List<string> except = new List<string>();
-                    except.Add(properties.First());
-
-                    foreach (string property in properties.Except(except))
-                    {
-                        while (reader.Read())
-                        {
-                            if (reader.Value != null && reader.Value.Equals(property))
-                            {
-                                reader.Read();
-                                property_dic[property] = (string)reader.Value;
-                                break;
-                            }
-                        }                        
-                    }
-
-                    result.Add(property_dic);
-                }
-
-                if(reader.Value != null && reader.Value.Equals("after"))
-                {
-                    reader.Read();
-                    Dictionary<string, string> after = new Dictionary<string, string>();
-                    after["after"] = (string)reader.Value;
-                    result.Add(after);
-                }
-            }
-
-            return result;
         }
     }
 }
