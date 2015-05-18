@@ -33,11 +33,17 @@ namespace RedditUniversal.ViewModels
             TextBlock caption = new TextBlock();
             caption.Text = (comment.body != null) ? comment.body : comment.body_html;
             caption.TextWrapping = TextWrapping.WrapWholeWords;
+            caption.Width = Window.Current.Bounds.Width;
             button_content.Children.Add(caption);
 
             this.Content = button_content;
             this.BorderBrush = new SolidColorBrush(Windows.UI.Color.FromArgb(100, 100, 100, 255));
             this.BorderThickness = new Thickness(1);
+        }
+
+        public TextBlock GetCaption()
+        {
+            return ((TextBlock)((StackPanel)this.Content).Children.Last());
         }
     }
 }

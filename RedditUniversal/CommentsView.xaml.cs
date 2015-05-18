@@ -106,6 +106,7 @@ namespace RedditUniversal
             foreach (CommentButton button in comment_buttons)
             {
                 button.Width = Window.Current.Bounds.Width;
+                button.GetCaption().Width = Window.Current.Bounds.Width;
             }
         }
     }

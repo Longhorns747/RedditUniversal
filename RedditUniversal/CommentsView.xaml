@@ -20,8 +20,10 @@
         <Grid Name="title_grid" Grid.Row="0" Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <Button Name="back_button" Content="Back" Click="back_button_Click"/>
         </Grid>
-        
-        <Grid x:Name="comment_grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" ScrollViewer.VerticalScrollMode="Enabled" Grid.Row="1" Grid.Column="0"/>
-        
+
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="1" Grid.Column="0" HorizontalScrollMode="Disabled">
+            <Grid x:Name="comment_grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Grid.Row="1" Grid.Column="0"/>
+        </ScrollViewer>
+
     </Grid>
 </Page>
