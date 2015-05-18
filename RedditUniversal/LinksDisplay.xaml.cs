@@ -153,7 +153,7 @@ namespace RedditUniversal
 
         private void link_but_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(BrowserView), new BrowserViewParameters(((LinkButton)sender).link.url, requester.access_token, current_subreddit, logged_in));
+            this.Frame.Navigate(typeof(BrowserView), new BrowserViewParameters(((LinkButton)sender).link, requester.access_token, current_subreddit, logged_in));
         }
     }
 }

@@ -14,6 +14,9 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using RedditUniversal.Controllers;
 using Windows.Web.Http;
+using RedditUniversal.Models;
+using RedditUniversal.Utils;
+using RedditUniversal.DataModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -27,6 +30,7 @@ namespace RedditUniversal
         string access_token = "";
         bool logged_in;
         string subreddit;
+        Link current_link;
 
         public BrowserView()
         {
@@ -36,12 +40,12 @@ namespace RedditUniversal
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             BrowserViewParameters parameters = (BrowserViewParameters)e.Parameter;
-            string url = parameters.url;
+            current_link = parameters.current_link;
             access_token = parameters.access_token;
             logged_in = parameters.logged_in;
             subreddit = parameters.subreddit;
 
-            HttpRequestMessage webRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
+            HttpRequestMessage webRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(current_link.url));
             webRequest.Headers.UserAgent.Add(new Windows.Web.Http.Headers.HttpProductInfoHeaderValue("Mozilla/5.0 (Linux; <Android Version>; <Build Tag etc.>) AppleWebKit/<WebKit Rev> (KHTML, like Gecko) Chrome/<Chrome Rev> Mobile Safari/<WebKit Rev>"));
 
             webViewer.IsTapEnabled = false;
@@ -51,6 +55,12 @@ namespace RedditUniversal
         private void back_button_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(ListingDisplay), new ListingDisplayParameters(subreddit, logged_in, access_token));
+        }
+
+        private async void comments_button_Click(object sender, RoutedEventArgs e)
+        {
+            RedditRequester requester = new RedditRequester(access_token);
+            List<Comment> comments = await requester.GetComments(current_link, "");
         }
     }
 }

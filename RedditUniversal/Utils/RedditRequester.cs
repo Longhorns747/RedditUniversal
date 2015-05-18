@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using RedditUniversal.Utils;
 using RedditUniversal.Models;
 using System.IO;
+using RedditUniversal.DataModels;
 
 namespace RedditUniversal.Utils
 {
@@ -60,6 +61,18 @@ namespace RedditUniversal.Utils
             RestClient listings_request = new RestClient(url, access_token);
             string result = await listings_request.MakeRequest(parameters);
             return GetLinkProperties(result);
+        }
+
+        public async Task<List<Comment>> GetComments(Link link, string parameters)
+        {
+            List<Comment> comments = new List<Comment>();
+            string url = "/comments/" + link.id;
+            RestClient comments_request = new RestClient(url, access_token);
+            string result = await comments_request.MakeRequest();
+
+            List<CommentTree> m = JsonConvert.DeserializeObject<List<CommentTree>>(result);
+
+            return comments;
         }
 
         private List<Subreddit> GetSubredditProperties(string json)

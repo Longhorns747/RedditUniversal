@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="RedditUniversal.BrowserView"
+    x:Class="RedditUniversal.CommentsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RedditUniversal"
@@ -17,11 +17,11 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <WebView x:Name="webViewer" Grid.Row="1" Grid.Column="0" />
-        
         <Grid Name="title_grid" Grid.Row="0" Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <Button Name="back_button" Content="Back" Click="back_button_Click"/>
-            <Button Name="comments_button" Content="Comments" HorizontalAlignment="Right" Click="comments_button_Click"/>
         </Grid>
+        
+        <Grid x:Name="comment_grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Grid.Row="1" Grid.Column="0"/>
+        
     </Grid>
 </Page>
