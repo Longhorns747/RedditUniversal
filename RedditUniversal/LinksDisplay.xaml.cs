@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using RedditUniversal.ParameterModels;
 using Windows.UI.Core;
 using RedditUniversal.ViewModels;
+using Windows.Storage;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -43,6 +44,7 @@ namespace RedditUniversal
             Window.Current.SizeChanged += new WindowSizeChangedEventHandler(this.Resize_Buttons);
             Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
             Application.Current.Resuming += new EventHandler<Object>(App_Resuming);
+            Windows.Storage.ApplicationData.Current.DataChanged += new TypedEventHandler<ApplicationData, object>(DataChangeHandler);
         }
 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
@@ -160,16 +162,27 @@ namespace RedditUniversal
 
         private void App_Suspending(Object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            localSettings.Values["access_token"] = requester.access_token;
-            localSettings.Values["logged_in"] = logged_in;
+            Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+            roamingSettings.Values["access_token"] = requester.access_token;
+            roamingSettings.Values["logged_in"] = logged_in;
         }
 
         private void App_Resuming(Object sender, Object e)
         {
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            requester = new RedditRequester((string)localSettings.Values["access_token"]);
-            logged_in = (bool)localSettings.Values["logged_in"];
+            Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+            requester = new RedditRequester((string)roamingSettings.Values["access_token"]);
+            logged_in = (bool)roamingSettings.Values["logged_in"];
+        }
+
+        /// <summary>
+        /// Roaming app data change handler
+        /// </summary>
+        /// <param name="appData"></param>
+        /// <param name="o"></param>
+        void DataChangeHandler(Windows.Storage.ApplicationData appData, object o)
+        {
+            requester = new RedditRequester((string)appData.RoamingSettings.Values["access_token"]);
+            logged_in = (bool)appData.RoamingSettings.Values["logged_in"];
         }
     }
 }

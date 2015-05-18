@@ -83,9 +83,9 @@ namespace RedditUniversal
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-                string access_token = (string)localSettings.Values["access_token"];
-                bool logged_in = (bool)localSettings.Values["logged_in"];
+                Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+                string access_token = (roamingSettings.Values["access_token"] != null) ? (string)roamingSettings.Values["access_token"] : "";
+                bool logged_in = (roamingSettings.Values["logged_in"] != null) ? (bool)roamingSettings.Values["logged_in"] : false;
 
                 rootFrame.Navigate(typeof(ListingDisplay), new ListingDisplayParameters("", logged_in, access_token));
             }
