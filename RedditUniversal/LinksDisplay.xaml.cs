@@ -77,6 +77,7 @@ namespace RedditUniversal
             GetHot("");
             progress_ring.Visibility = Visibility.Collapsed;
             progress_ring.IsActive = false;
+            LinkPanelScrollViewer.ChangeView(null, current_state.vertical_scroll_offset, null, false);
         }
 
         /// <summary>
@@ -213,6 +214,7 @@ namespace RedditUniversal
         private void link_but_Click(object sender, RoutedEventArgs e)
         {
             current_state.current_link = ((LinkButton)sender).link;
+            current_state.vertical_scroll_offset = LinkPanelScrollViewer.VerticalOffset;
             this.Frame.Navigate(typeof(BrowserView), current_state);
         }
 

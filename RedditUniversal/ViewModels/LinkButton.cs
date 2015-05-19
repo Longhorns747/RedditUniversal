@@ -98,12 +98,12 @@ namespace RedditUniversal.ViewModels
 
         public Image GetThumbnail()
         {
-            return ((Image)((StackPanel)this.Content).Children.First());
+            return (Image)((StackPanel)((StackPanel)this.Content).Children.Last()).Children.First();
         }
 
         public TextBlock GetCaption()
         {
-            return ((TextBlock)((StackPanel)this.Content).Children.Last());
+            return (TextBlock)((StackPanel)((StackPanel)this.Content).Children.Last()).Children.Last(); ;
         }
 
         public int GetThumbSize()
