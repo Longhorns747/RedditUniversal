@@ -20,7 +20,7 @@ using RedditUniversal.DataModels;
 namespace RedditUniversal
 {
     /// <summary>
-    /// Page to login the user to reddit
+    /// Page to login the user to reddit, uses webapp
     /// </summary>
     public sealed partial class LoginPage : Page
     {
@@ -32,6 +32,11 @@ namespace RedditUniversal
             web.Navigate(new Uri(url));
         }
 
+        /// <summary>
+        /// Parse out the access_token of the result from the webapp
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void web_LoadCompleted(object sender, NavigationEventArgs e)
         {
             string content = await ((WebView)sender).InvokeScriptAsync("eval", new string[] { "document.body.innerHTML;" });

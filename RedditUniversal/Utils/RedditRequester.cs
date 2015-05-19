@@ -155,6 +155,10 @@ namespace RedditUniversal.Utils
             return res;
         }
 
+        /// <summary>
+        /// Refreshes the access_token using the webapp
+        /// </summary>
+        /// <returns>an updated state with the refreshed token</returns>
         public async Task<State> RefreshToken()
         {
             using (var client = new HttpClient())
@@ -191,6 +195,10 @@ namespace RedditUniversal.Utils
             return state;
         }
 
+        /// <summary>
+        /// Checks if the token needs to be refreshed
+        /// </summary>
+        /// <returns></returns>
         public bool NeedToRefresh()
         {
             return DateTime.Now.CompareTo(state.expire_time) > 0;
