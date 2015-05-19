@@ -73,10 +73,10 @@ namespace RedditUniversal
 
             current_subreddit_label.Text = (current_state.current_subreddit.display_name.Equals("")) ? "Front Page" : current_state.current_subreddit.display_name;
 
-            GetHot("");
+            await GetHot("");
             progress_ring.Visibility = Visibility.Collapsed;
+            bool res = LinkPanelScrollViewer.ChangeView(null, current_state.vertical_scroll_offset, null, false);
             progress_ring.IsActive = false;
-            LinkPanelScrollViewer.ChangeView(null, current_state.vertical_scroll_offset, null, false);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace RedditUniversal
         /// Returns links in "hot" order
         /// </summary>
         /// <param name="parameters">url parameters</param>
-        private async void GetHot(string parameters)
+        private async Task GetHot(string parameters)
         {
             Tuple<List<Link>, string> result = await requester.GetHot("count=" + max_count + "&" + parameters);
             List<Link> links = result.Item1;
@@ -105,7 +105,7 @@ namespace RedditUniversal
         /// Returns links for a specific subreddit in "hot" order
         /// </summary>
         /// <param name="target"></param>
-        private async void GetHot(Subreddit target)
+        private async Task GetHot(Subreddit target)
         {
             Tuple<List<Link>, string> result = await requester.GetHot(target, "count=" + max_count);
             List<Link> links = result.Item1;
@@ -145,7 +145,7 @@ namespace RedditUniversal
             else
             {
                 AddAfterButtonToUI(after);
-            }           
+            }
         }
 
         /// <summary>
