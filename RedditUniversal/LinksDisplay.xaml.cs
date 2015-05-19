@@ -66,6 +66,8 @@ namespace RedditUniversal
             current_subreddit_label.Text = (current_state.current_subreddit.display_name.Equals("")) ? "Front Page" : current_state.current_subreddit.display_name;
 
             GetHot("");
+            progress_ring.Visibility = Visibility.Collapsed;
+            progress_ring.IsActive = false;
         }
 
         /// <summary>

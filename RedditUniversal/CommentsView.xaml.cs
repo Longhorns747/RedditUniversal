@@ -55,6 +55,8 @@ namespace RedditUniversal
             string after = result.Item2;
 
             AddCommentsToUI(comments, after);
+            progress_ring.Visibility = Visibility.Collapsed;
+            progress_ring.IsActive = false;
         }
 
         private void back_button_Click(object sender, RoutedEventArgs e)

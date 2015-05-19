@@ -7,8 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" RequestedTheme="Dark">
 
-    <Grid>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -21,8 +22,10 @@
             <Button Name="back_button" Content="Back" Click="back_button_Click"/>
         </Grid>
 
-        <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="1" Grid.Column="0" HorizontalScrollMode="Disabled">
-            <Grid x:Name="comment_grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" Grid.Row="1" Grid.Column="0"/>
+        <ProgressRing Name="progress_ring" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"  IsActive="True" Visibility="Visible" Grid.Row="1" RequestedTheme="Dark" Height="100" Width="100"/>
+
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="2" Grid.Column="0" HorizontalScrollMode="Disabled">
+            <Grid x:Name="comment_grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark" Grid.Row="2" Grid.Column="0"/>
         </ScrollViewer>
 
     </Grid>

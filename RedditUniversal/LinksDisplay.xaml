@@ -7,8 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid RequestedTheme="Dark">
+    <Grid RequestedTheme="Dark" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -30,8 +31,10 @@
                 RedditUniversal
             </TextBlock>
         </Grid>
+        
+        <ProgressRing Name="progress_ring" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"  IsActive="True" Visibility="Visible" Grid.Row="1" RequestedTheme="Dark" Height="100" Width="100"/>
 
-        <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="1" Grid.Column="0" HorizontalScrollMode="Disabled">
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="2" Grid.Column="0" HorizontalScrollMode="Disabled">
             <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Name="LinkPanel" RequestedTheme="Dark">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
