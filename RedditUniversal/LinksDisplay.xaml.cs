@@ -57,11 +57,20 @@ namespace RedditUniversal
             current_state = (State)(e.Parameter);
             requester = new RedditRequester(current_state);
 
-            current_state.access_token = await requester.RetrieveUserAccessToken();
+            current_state = await requester.RetrieveUserAccessToken();
             current_state = (requester.NeedToRefresh()) ? await requester.RefreshToken() : current_state;
 
             if (current_state.logged_in)
+            {
                 subreddits = await GetSubreddits();
+                login_but.Visibility = Visibility.Collapsed;
+                logout_but.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                login_but.Visibility = Visibility.Visible;
+                logout_but.Visibility = Visibility.Collapsed;
+            }               
 
             current_subreddit_label.Text = (current_state.current_subreddit.display_name.Equals("")) ? "Front Page" : current_state.current_subreddit.display_name;
 
@@ -251,6 +260,20 @@ namespace RedditUniversal
             current_state.expire_time = DateTime.Parse((string)roamingSettings.Values["expire_time"]);
             current_state.logged_in = (bool)roamingSettings.Values["logged_in"];
             current_state.current_subreddit = new Subreddit((string)roamingSettings.Values["current_subreddit_id"], (string)roamingSettings.Values["current_subreddit_display_name"]);
+        }
+
+        private void logout_but_Click(object sender, RoutedEventArgs e)
+        {
+            State blank_state = new State();
+            blank_state.access_token = "";
+            blank_state.current_link = new Link();
+            blank_state.current_subreddit = new Subreddit("", "");
+            blank_state.refresh_token = "";
+            blank_state.expire_time = DateTime.Now;
+            blank_state.logged_in = false;
+            requester = new RedditRequester(blank_state);
+
+            this.Frame.Navigate(typeof(LinksDisplay), blank_state);
         }
     }
 }

@@ -14,5 +14,6 @@ namespace RedditUniversal.DataModels
         public Link current_link { get; set; }
         public Subreddit current_subreddit { get; set; }
         public DateTime expire_time { get; set; }
+        public double scroll_offset { get; set; }
     }
 }

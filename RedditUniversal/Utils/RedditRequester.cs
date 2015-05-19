@@ -122,14 +122,14 @@ namespace RedditUniversal.Utils
         /// when the requester object was instantiated
         /// </summary>
         /// <returns>Returns new access_token</returns>
-        public async Task<string> RetrieveUserAccessToken()
+        public async Task<State> RetrieveUserAccessToken()
         {
             if (state.refresh_token.Equals(""))
             {
                 state.access_token = await AppLogin();
             }
 
-            return state.access_token;
+            return state;
         }
 
         /// <summary>
