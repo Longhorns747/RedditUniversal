@@ -55,10 +55,9 @@ namespace RedditUniversal
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             current_state = (State)(e.Parameter);
-            requester = new RedditRequester(current_state);
+            requester = await RedditRequester.MakeRedditRequester(current_state);
 
-            current_state = await requester.RetrieveUserAccessToken();
-            current_state = (requester.NeedToRefresh()) ? await requester.RefreshToken() : current_state;
+            current_state = await requester.RefreshToken();
 
             if (current_state.logged_in)
             {
@@ -264,7 +263,7 @@ namespace RedditUniversal
             current_state.current_subreddit = new Subreddit((string)roamingSettings.Values["current_subreddit_id"], (string)roamingSettings.Values["current_subreddit_display_name"]);
         }
 
-        private void logout_but_Click(object sender, RoutedEventArgs e)
+        private async void logout_but_Click(object sender, RoutedEventArgs e)
         {
             State blank_state = new State();
             blank_state.access_token = "";
@@ -273,7 +272,7 @@ namespace RedditUniversal
             blank_state.refresh_token = "";
             blank_state.expire_time = DateTime.Now;
             blank_state.logged_in = false;
-            requester = new RedditRequester(blank_state);
+            requester = await RedditRequester.MakeRedditRequester(blank_state);
 
             this.Frame.Navigate(typeof(LinksDisplay), blank_state);
         }

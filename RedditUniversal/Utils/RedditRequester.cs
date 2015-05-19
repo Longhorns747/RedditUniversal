@@ -18,7 +18,14 @@ namespace RedditUniversal.Utils
     {
         public State state { get; set; }
 
-        public RedditRequester(State state)
+        public async static Task<RedditRequester> MakeRedditRequester(State state)
+        {
+            RedditRequester res = new RedditRequester(state);
+            await res.RetrieveUserAccessToken();
+            return res;
+        }
+
+        private RedditRequester(State state)
         {
             this.state = state;
         }
@@ -122,14 +129,12 @@ namespace RedditUniversal.Utils
         /// when the requester object was instantiated
         /// </summary>
         /// <returns>Returns new access_token</returns>
-        public async Task<State> RetrieveUserAccessToken()
+        public async Task RetrieveUserAccessToken()
         {
-            if (state.refresh_token.Equals(""))
+            if (state.refresh_token.Equals("") || state.access_token.Equals(""))
             {
                 state.access_token = await AppLogin();
             }
-
-            return state;
         }
 
         /// <summary>
@@ -161,31 +166,34 @@ namespace RedditUniversal.Utils
         /// <returns>an updated state with the refreshed token</returns>
         public async Task<State> RefreshToken()
         {
-            using (var client = new HttpClient())
+            if (NeedToRefresh() && !state.refresh_token.Equals(""))
             {
-                client.BaseAddress = new Uri("http://universalredditlogin.azurewebsites.net/home/refreshtoken?refresh_token=" + state.refresh_token);
-                HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
-                string content = await response.Content.ReadAsStringAsync();
-
-                if (content.Contains("access_token"))
+                using (var client = new HttpClient())
                 {
-                    JsonTextReader reader = new JsonTextReader(new StringReader(content));
-                    State state = new State();
+                    client.BaseAddress = new Uri("http://universalredditlogin.azurewebsites.net/home/refreshtoken?refresh_token=" + state.refresh_token);
+                    HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
+                    string content = await response.Content.ReadAsStringAsync();
 
-                    while (reader.Read())
+                    if (content.Contains("access_token"))
                     {
-                        if (reader.Value != null)
+                        JsonTextReader reader = new JsonTextReader(new StringReader(content));
+                        State state = new State();
+
+                        while (reader.Read())
                         {
-                            if (reader.Value.Equals("access_token"))
+                            if (reader.Value != null)
                             {
-                                reader.Read();
-                                state.access_token = (string)reader.Value;
-                            }
-                            else if (reader.Value.Equals("expires_in"))
-                            {
-                                reader.Read();
-                                Int64 expires_in = (Int64)reader.Value;
-                                state.expire_time = DateTime.UtcNow.AddSeconds(expires_in);
+                                if (reader.Value.Equals("access_token"))
+                                {
+                                    reader.Read();
+                                    state.access_token = (string)reader.Value;
+                                }
+                                else if (reader.Value.Equals("expires_in"))
+                                {
+                                    reader.Read();
+                                    Int64 expires_in = (Int64)reader.Value;
+                                    state.expire_time = DateTime.UtcNow.AddSeconds(expires_in);
+                                }
                             }
                         }
                     }
@@ -199,7 +207,7 @@ namespace RedditUniversal.Utils
         /// Checks if the token needs to be refreshed
         /// </summary>
         /// <returns></returns>
-        public bool NeedToRefresh()
+        private bool NeedToRefresh()
         {
             return DateTime.Now.CompareTo(state.expire_time) > 0;
         }
