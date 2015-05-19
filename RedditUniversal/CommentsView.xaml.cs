@@ -1,5 +1,4 @@
-﻿using RedditUniversal.ParameterModels;
-using RedditUniversal.DataModels;
+﻿using RedditUniversal.DataModels;
 using RedditUniversal.Utils;
 using System;
 using System.Collections.Generic;
@@ -27,10 +26,7 @@ namespace RedditUniversal
     /// </summary>
     public sealed partial class CommentsView : Page
     {
-        string access_token;
-        bool logged_in;
-        Link current_link;
-        string subreddit;
+        State current_state;
         int num_comments = 0;
         List<CommentButton> comment_buttons = new List<CommentButton>();
 
@@ -49,14 +45,10 @@ namespace RedditUniversal
         /// <param name="e">Must be of type CommentViewParameters</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            CommentViewParameters parameters = (CommentViewParameters)e.Parameter;
-            this.access_token = parameters.access_token;
-            this.logged_in = parameters.logged_in;
-            this.current_link = parameters.current_link;
-            this.subreddit = parameters.subreddit;
+            current_state = (State)e.Parameter;
 
-            RedditRequester requester = new RedditRequester(access_token);
-            Tuple<List<Comment>, string> result = await requester.GetComments(current_link, "");
+            RedditRequester requester = new RedditRequester(current_state.access_token);
+            Tuple<List<Comment>, string> result = await requester.GetComments(current_state.current_link, "");
             List<Comment> comments = result.Item1;
             string after = result.Item2;
 
@@ -65,7 +57,7 @@ namespace RedditUniversal
 
         private void back_button_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(BrowserView), new BrowserViewParameters(current_link, access_token, subreddit, logged_in));
+            this.Frame.Navigate(typeof(BrowserView), current_state);
         }
 
         /// <summary>

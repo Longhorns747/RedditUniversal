@@ -13,9 +13,9 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using RedditUniversal.ParameterModels;
 using Windows.UI.Xaml.Navigation;
 using RedditUniversal.Utils;
+using RedditUniversal.DataModels;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=402347&clcid=0x409
 
@@ -86,10 +86,14 @@ namespace RedditUniversal
                 
                 //Retrieve state from the cloud
                 Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
-                string access_token = (roamingSettings.Values["access_token"] != null) ? (string)roamingSettings.Values["access_token"] : "";
-                bool logged_in = (roamingSettings.Values["logged_in"] != null) ? (bool)roamingSettings.Values["logged_in"] : false;
+                //string access_token = (roamingSettings.Values["access_token"] != null) ? (string)roamingSettings.Values["access_token"] : "";
+                //bool logged_in = (roamingSettings.Values["logged_in"] != null) ? (bool)roamingSettings.Values["logged_in"] : false;
+                State current_state = new State();
+                current_state.access_token = "";
+                Subreddit start_subreddit = new Subreddit("", "");
+                current_state.current_subreddit = start_subreddit;
 
-                rootFrame.Navigate(typeof(LinksDisplay), new LinksDisplayParameters("", logged_in, access_token));
+                rootFrame.Navigate(typeof(LinksDisplay), current_state);
             }
             // Ensure the current window is active
             Window.Current.Activate();

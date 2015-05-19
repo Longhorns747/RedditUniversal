@@ -102,15 +102,14 @@
       <DependentUpon>CommentsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataModels\Comment.cs" />
-    <Compile Include="ParameterModels\BrowserViewParameters.cs" />
-    <Compile Include="ParameterModels\CommentViewParameters.cs" />
-    <Compile Include="ParameterModels\LinksDisplayParameters.cs" />
+    <Compile Include="DataModels\State.cs" />
     <Compile Include="LinksDisplay.xaml.cs">
       <DependentUpon>LinksDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\RedditInfo.cs" />
     <Compile Include="ViewModels\AfterButton.cs" />
     <Compile Include="DataModels\Link.cs" />
     <Compile Include="ViewModels\Colors.cs" />

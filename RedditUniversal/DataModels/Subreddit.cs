@@ -11,8 +11,8 @@ namespace RedditUniversal.DataModels
     /// </summary>
     class Subreddit
     {
-        public string id { get; }
-        public string display_name { get; }
+        public string id { get; set; }
+        public string display_name { get; set; }
 
         public Subreddit(string id, string display_name)
         {

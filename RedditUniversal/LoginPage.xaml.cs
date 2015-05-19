@@ -11,8 +11,9 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using RedditUniversal.ParameterModels;
 using Windows.UI.Xaml.Navigation;
+using Newtonsoft.Json;
+using RedditUniversal.DataModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -21,36 +22,52 @@ namespace RedditUniversal
     /// <summary>
     /// Page to login the user to reddit
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class LoginPage : Page
     {
-        const string client_id = "tJvmFPf0SKBJGg";
-        const string redirect_uri = "http://www.reddituniversal.com";
-        const string scope = "read,mysubreddits,identity";
-        static string url =
-            @"https://www.reddit.com/api/v1/authorize?client_id=" + client_id +
-                "&response_type=token&state=huehue&redirect_uri=" + redirect_uri + "&scope=" + scope;
+        string url =  @"http://universalredditlogin.azurewebsites.net/";
 
-        public MainPage()
+        public LoginPage()
         {
             this.InitializeComponent();
             web.Navigate(new Uri(url));
         }
 
-        private void web_NavStart(WebView sender, WebViewNavigationStartingEventArgs args)
+        private async void web_LoadCompleted(object sender, NavigationEventArgs e)
         {
-            string target_url = "";
-            try { target_url = args.Uri.ToString(); }
-            finally
+            string content = await ((WebView)sender).InvokeScriptAsync("eval", new string[] { "document.body.innerHTML;" });
+            if (content.Contains("access_token"))
             {
-                if(target_url.Contains("access_token"))
-                {
-                    string[] parts = target_url.Split(new char[] { '#', '&' });
-                    string access_token = parts[1].Substring(13);
+                JsonTextReader reader = new JsonTextReader(new StringReader(content));
+                State state = new State();
 
-                    this.Frame.Navigate(typeof(LinksDisplay), new LinksDisplayParameters("", true, access_token));
+                while (reader.Read())
+                {
+                    if (reader.Value != null)
+                    {
+                        if (reader.Value.Equals("access_token"))
+                        {
+                            reader.Read();
+                            state.access_token = (string)reader.Value;
+                        }
+                        else if (reader.Value.Equals("refresh_token"))
+                        {
+                            reader.Read();
+                            state.refresh_token = (string)reader.Value;
+                        }
+                        else if (reader.Value.Equals("expires_in"))
+                        {
+                            reader.Read();
+                            Int64 expires_in = (Int64)reader.Value;
+                            state.expire_time = DateTime.UtcNow.AddSeconds(expires_in);
+                        }
+                    }
                 }
 
-            }
+                state.logged_in = true;
+                state.current_subreddit = new Subreddit("", "");
+                state.current_link = new Link();
+                this.Frame.Navigate(typeof(LinksDisplay), state);
+            }            
         }
     }
 }

@@ -120,16 +120,15 @@ namespace RedditUniversal.Utils
         /// Retrieves the access token for either a user or the Application depending on the access_token set
         /// when the requester object was instantiated
         /// </summary>
-        /// <returns>Returns false if the access_token was for the Application (not logged in) or true if for a specific user (logged in)</returns>
-        public async Task<bool> RetrieveUserAccessToken()
+        /// <returns>Returns new access_token</returns>
+        public async Task<string> RetrieveUserAccessToken()
         {
             if (access_token.Equals(""))
             {
                 access_token = await AppLogin();
-                return false;
             }
 
-            return true;
+            return access_token;
         }
 
         /// <summary>

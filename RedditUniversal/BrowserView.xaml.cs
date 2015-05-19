@@ -12,7 +12,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using RedditUniversal.ParameterModels;
 using Windows.Web.Http;
 using RedditUniversal.ViewModels;
 using RedditUniversal.Utils;
@@ -27,10 +26,7 @@ namespace RedditUniversal
     /// </summary>
     public sealed partial class BrowserView : Page
     {
-        string access_token = "";
-        bool logged_in;
-        string subreddit;
-        Link current_link;
+        State current_state;
 
         public BrowserView()
         {
@@ -43,13 +39,9 @@ namespace RedditUniversal
         /// <param name="e">Must be of type BrowserViewParameters</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            BrowserViewParameters parameters = (BrowserViewParameters)e.Parameter;
-            current_link = parameters.current_link;
-            access_token = parameters.access_token;
-            logged_in = parameters.logged_in;
-            subreddit = parameters.subreddit;
+            current_state = (State)e.Parameter;
 
-            HttpRequestMessage webRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(current_link.url));
+            HttpRequestMessage webRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(current_state.current_link.url));
             webRequest.Headers.UserAgent.Add(new Windows.Web.Http.Headers.HttpProductInfoHeaderValue("Mozilla/5.0 (Linux; <Android Version>; <Build Tag etc.>) AppleWebKit/<WebKit Rev> (KHTML, like Gecko) Chrome/<Chrome Rev> Mobile Safari/<WebKit Rev>"));
 
             webViewer.IsTapEnabled = false;
@@ -58,12 +50,12 @@ namespace RedditUniversal
 
         private void back_button_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(LinksDisplay), new LinksDisplayParameters(subreddit, logged_in, access_token));
+            this.Frame.Navigate(typeof(LinksDisplay), current_state);
         }
 
         private void comments_button_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(CommentsView), new CommentViewParameters(access_token, current_link, logged_in, subreddit));
+            this.Frame.Navigate(typeof(CommentsView), current_state);
         }
     }
 }

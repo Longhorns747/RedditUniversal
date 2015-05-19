@@ -16,7 +16,6 @@ using Windows.UI.Xaml.Navigation;
 using RedditUniversal.Utils;
 using RedditUniversal.DataModels;
 using Windows.UI.Xaml.Media.Imaging;
-using RedditUniversal.ParameterModels;
 using Windows.UI.Core;
 using RedditUniversal.ViewModels;
 using Windows.Storage;
@@ -35,7 +34,7 @@ namespace RedditUniversal
         List<Subreddit> subreddits;
         int num_links = 0;
         bool logged_in = false;
-        string current_subreddit = "";
+        State current_state;
         static int max_count = 0;
 
         /// <summary>
@@ -45,9 +44,9 @@ namespace RedditUniversal
         {
             this.InitializeComponent();
             Window.Current.SizeChanged += new WindowSizeChangedEventHandler(this.Resize_Buttons);
-            Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
-            Application.Current.Resuming += new EventHandler<Object>(App_Resuming);
-            Windows.Storage.ApplicationData.Current.DataChanged += new TypedEventHandler<ApplicationData, object>(DataChangeHandler);
+            //Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
+            //Application.Current.Resuming += new EventHandler<Object>(App_Resuming);
+            //Windows.Storage.ApplicationData.Current.DataChanged += new TypedEventHandler<ApplicationData, object>(DataChangeHandler);
         }
 
         /// <summary>
@@ -56,18 +55,16 @@ namespace RedditUniversal
         /// <param name="e">Navigation parameters of type: ListingDisplayParameters</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            LinksDisplayParameters parameters = (LinksDisplayParameters)(e.Parameter);
-            requester = new RedditRequester(parameters.access_token);
+            current_state = (State)(e.Parameter);
+            requester = new RedditRequester(current_state.access_token);
 
-            await requester.RetrieveUserAccessToken();
+            current_state.access_token = await requester.RetrieveUserAccessToken();
 
-            if (parameters.logged_in)
+            if (current_state.logged_in)
                 subreddits = await GetSubreddits();
 
-            logged_in = parameters.logged_in;
-
-            current_subreddit = (parameters.subreddit.Equals("")) ? "Front Page" : parameters.subreddit;
-            current_subreddit_label.Text = current_subreddit;
+            logged_in = current_state.logged_in;
+            current_subreddit_label.Text = (current_state.current_subreddit.display_name.Equals("")) ? "Front Page" : current_state.current_subreddit.display_name;
 
             GetHot("");
         }
@@ -195,7 +192,7 @@ namespace RedditUniversal
         /// <param name="e"></param>
         private void login_but_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage));
+            this.Frame.Navigate(typeof(LoginPage));
         }
 
         /// <summary>
@@ -205,7 +202,7 @@ namespace RedditUniversal
         /// <param name="e"></param>
         private void link_but_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(BrowserView), new BrowserViewParameters(((LinkButton)sender).link, requester.access_token, current_subreddit, logged_in));
+            this.Frame.Navigate(typeof(BrowserView), current_state);
         }
 
         /// <summary>
