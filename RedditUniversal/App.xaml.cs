@@ -86,13 +86,15 @@ namespace RedditUniversal
                 
                 //Retrieve state from the cloud
                 Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
-                //string access_token = (roamingSettings.Values["access_token"] != null) ? (string)roamingSettings.Values["access_token"] : "";
-                //bool logged_in = (roamingSettings.Values["logged_in"] != null) ? (bool)roamingSettings.Values["logged_in"] : false;
                 State current_state = new State();
-                current_state.access_token = "";
-                Subreddit start_subreddit = new Subreddit("", "");
-                current_state.current_subreddit = start_subreddit;
+                current_state.access_token = (roamingSettings.Values["access_token"] != null) ? (string)roamingSettings.Values["access_token"] : "";
+                current_state.refresh_token = (roamingSettings.Values["refresh_token"] != null) ? (string)roamingSettings.Values["refresh_token"] : "";
+                current_state.expire_time = (roamingSettings.Values["expire_time"] != null) ? DateTime.Parse((string)roamingSettings.Values["expire_time"]) : DateTime.Now;
+                current_state.logged_in = (roamingSettings.Values["logged_in"] != null) ? (bool)roamingSettings.Values["logged_in"] : false;
+                current_state.current_subreddit = (roamingSettings.Values["current_subreddit_id"] != null) ?
+                    new Subreddit((string)roamingSettings.Values["current_subreddit_id"], (string)roamingSettings.Values["current_subreddit_display_name"]) : new Subreddit("", "");
 
+                current_state.current_link = new Link();
                 rootFrame.Navigate(typeof(LinksDisplay), current_state);
             }
             // Ensure the current window is active

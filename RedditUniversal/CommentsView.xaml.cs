@@ -47,7 +47,9 @@ namespace RedditUniversal
         {
             current_state = (State)e.Parameter;
 
-            RedditRequester requester = new RedditRequester(current_state.access_token);
+            RedditRequester requester = new RedditRequester(current_state);
+            current_state = (requester.NeedToRefresh()) ? await requester.RefreshToken() : current_state;
+
             Tuple<List<Comment>, string> result = await requester.GetComments(current_state.current_link, "");
             List<Comment> comments = result.Item1;
             string after = result.Item2;

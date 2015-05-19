@@ -33,7 +33,6 @@ namespace RedditUniversal
         List<LinkButton> link_buttons = new List<LinkButton>();
         List<Subreddit> subreddits;
         int num_links = 0;
-        bool logged_in = false;
         State current_state;
         static int max_count = 0;
 
@@ -44,9 +43,9 @@ namespace RedditUniversal
         {
             this.InitializeComponent();
             Window.Current.SizeChanged += new WindowSizeChangedEventHandler(this.Resize_Buttons);
-            //Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
-            //Application.Current.Resuming += new EventHandler<Object>(App_Resuming);
-            //Windows.Storage.ApplicationData.Current.DataChanged += new TypedEventHandler<ApplicationData, object>(DataChangeHandler);
+            Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
+            Application.Current.Resuming += new EventHandler<Object>(App_Resuming);
+            ApplicationData.Current.DataChanged += new TypedEventHandler<ApplicationData, object>(DataChangeHandler);
         }
 
         /// <summary>
@@ -56,14 +55,14 @@ namespace RedditUniversal
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             current_state = (State)(e.Parameter);
-            requester = new RedditRequester(current_state.access_token);
+            requester = new RedditRequester(current_state);
 
             current_state.access_token = await requester.RetrieveUserAccessToken();
+            current_state = (requester.NeedToRefresh()) ? await requester.RefreshToken() : current_state;
 
             if (current_state.logged_in)
                 subreddits = await GetSubreddits();
 
-            logged_in = current_state.logged_in;
             current_subreddit_label.Text = (current_state.current_subreddit.display_name.Equals("")) ? "Front Page" : current_state.current_subreddit.display_name;
 
             GetHot("");
@@ -202,6 +201,7 @@ namespace RedditUniversal
         /// <param name="e"></param>
         private void link_but_Click(object sender, RoutedEventArgs e)
         {
+            current_state.current_link = ((LinkButton)sender).link;
             this.Frame.Navigate(typeof(BrowserView), current_state);
         }
 
@@ -213,8 +213,12 @@ namespace RedditUniversal
         private void App_Suspending(Object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
             Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
-            roamingSettings.Values["access_token"] = requester.access_token;
-            roamingSettings.Values["logged_in"] = logged_in;
+            roamingSettings.Values["access_token"] = current_state.access_token;
+            roamingSettings.Values["refresh_token"] = current_state.refresh_token;
+            roamingSettings.Values["expire_time"] = current_state.expire_time.ToString();
+            roamingSettings.Values["logged_in"] = current_state.logged_in;
+            roamingSettings.Values["current_subreddit_id"] = current_state.current_subreddit.id;
+            roamingSettings.Values["current_subreddit_display_name"] = current_state.current_subreddit.display_name;
         }
 
         /// <summary>
@@ -224,9 +228,12 @@ namespace RedditUniversal
         /// <param name="e"></param>
         private void App_Resuming(Object sender, Object e)
         {
-            Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
-            requester = new RedditRequester((string)roamingSettings.Values["access_token"]);
-            logged_in = (bool)roamingSettings.Values["logged_in"];
+            ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+            current_state.access_token = (string)roamingSettings.Values["access_token"];
+            current_state.refresh_token = (string)roamingSettings.Values["refresh_token"];
+            current_state.expire_time = DateTime.Parse((string)roamingSettings.Values["expire_time"]);
+            current_state.logged_in = (bool)roamingSettings.Values["logged_in"];
+            current_state.current_subreddit = new Subreddit((string)roamingSettings.Values["current_subreddit_id"], (string)roamingSettings.Values["current_subreddit_display_name"]);
         }
 
         /// <summary>
@@ -236,8 +243,12 @@ namespace RedditUniversal
         /// <param name="o"></param>
         void DataChangeHandler(Windows.Storage.ApplicationData appData, object o)
         {
-            requester = new RedditRequester((string)appData.RoamingSettings.Values["access_token"]);
-            logged_in = (bool)appData.RoamingSettings.Values["logged_in"];
+            ApplicationDataContainer roamingSettings = appData.RoamingSettings;
+            current_state.access_token = (string)roamingSettings.Values["access_token"];
+            current_state.refresh_token = (string)roamingSettings.Values["refresh_token"];
+            current_state.expire_time = DateTime.Parse((string)roamingSettings.Values["expire_time"]);
+            current_state.logged_in = (bool)roamingSettings.Values["logged_in"];
+            current_state.current_subreddit = new Subreddit((string)roamingSettings.Values["current_subreddit_id"], (string)roamingSettings.Values["current_subreddit_display_name"]);
         }
     }
 }

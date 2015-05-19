@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using RedditUniversal.Utils;
 using System.IO;
 using RedditUniversal.DataModels;
+using System.Net.Http;
 
 namespace RedditUniversal.Utils
 {
@@ -15,11 +16,11 @@ namespace RedditUniversal.Utils
     /// </summary>
     class RedditRequester
     {
-        public string access_token { get; set; }
+        public State state { get; set; }
 
-        public RedditRequester(string access_token)
+        public RedditRequester(State state)
         {
-            this.access_token = access_token;
+            this.state = state;
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace RedditUniversal.Utils
         {
             string url = "subreddits/mine/subscriber/";
             url = (parameters.Equals("")) ? url : url + "?" + parameters;
-            RestClient listings_request = new RestClient(url, access_token);
+            RestClient listings_request = new RestClient(url, state.access_token);
             string result = await listings_request.MakeRequest(parameters);
             JsonTextReader reader = new JsonTextReader(new StringReader(result));
             List<Subreddit> subreddits = new List<Subreddit>();
@@ -78,7 +79,7 @@ namespace RedditUniversal.Utils
             List<Link> links = new List<Link>();
             string url = (target.id.Equals("")) ? "/hot" : "/r/" + target.display_name + "/hot";
             url = (parameters.Equals("")) ? url : url + "?" + parameters;
-            RestClient listings_request = new RestClient(url, access_token);
+            RestClient listings_request = new RestClient(url, state.access_token);
             string result = await listings_request.MakeRequest(parameters);
 
             LinkTree link_tree = JsonConvert.DeserializeObject<LinkTree>(result);
@@ -101,7 +102,7 @@ namespace RedditUniversal.Utils
         {
             List<Comment> comments = new List<Comment>();
             string url = "/comments/" + link.id;
-            RestClient comments_request = new RestClient(url, access_token);
+            RestClient comments_request = new RestClient(url, state.access_token);
             string result = await comments_request.MakeRequest();
 
             List<CommentTree> comment_tree = JsonConvert.DeserializeObject<List<CommentTree>>(result);
@@ -123,12 +124,12 @@ namespace RedditUniversal.Utils
         /// <returns>Returns new access_token</returns>
         public async Task<string> RetrieveUserAccessToken()
         {
-            if (access_token.Equals(""))
+            if (state.refresh_token.Equals(""))
             {
-                access_token = await AppLogin();
+                state.access_token = await AppLogin();
             }
 
-            return access_token;
+            return state.access_token;
         }
 
         /// <summary>
@@ -152,6 +153,47 @@ namespace RedditUniversal.Utils
             }
 
             return res;
+        }
+
+        public async Task<State> RefreshToken()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://universalredditlogin.azurewebsites.net/home/refreshtoken?refresh_token=" + state.refresh_token);
+                HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
+                string content = await response.Content.ReadAsStringAsync();
+
+                if (content.Contains("access_token"))
+                {
+                    JsonTextReader reader = new JsonTextReader(new StringReader(content));
+                    State state = new State();
+
+                    while (reader.Read())
+                    {
+                        if (reader.Value != null)
+                        {
+                            if (reader.Value.Equals("access_token"))
+                            {
+                                reader.Read();
+                                state.access_token = (string)reader.Value;
+                            }
+                            else if (reader.Value.Equals("expires_in"))
+                            {
+                                reader.Read();
+                                Int64 expires_in = (Int64)reader.Value;
+                                state.expire_time = DateTime.UtcNow.AddSeconds(expires_in);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return state;
+        }
+
+        public bool NeedToRefresh()
+        {
+            return DateTime.Now.CompareTo(state.expire_time) > 0;
         }
     }
 }
