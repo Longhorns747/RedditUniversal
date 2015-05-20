@@ -119,7 +119,7 @@ namespace RedditUniversal
         /// </summary>
         /// <param name="links"></param>
         /// <param name="after">The value of the next set of links to retrieve</param>
-        private void AddLinksToUI(List<Link> links, string after)
+        private async void AddLinksToUI(List<Link> links, string after)
         {
             foreach(Link link in links)
             {
@@ -140,7 +140,7 @@ namespace RedditUniversal
 
             if(num_links < max_count)
             {
-                GetHot("after=" + after);
+                await GetHot("after=" + after);
             }
             else
             {

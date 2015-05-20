@@ -86,6 +86,7 @@ namespace RedditUniversal
                 
                 //Retrieve state from the cloud
                 Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+
                 State current_state = new State();
                 current_state.access_token = (roamingSettings.Values["access_token"] != null) ? (string)roamingSettings.Values["access_token"] : "";
                 current_state.refresh_token = (roamingSettings.Values["refresh_token"] != null) ? (string)roamingSettings.Values["refresh_token"] : "";
