@@ -38,7 +38,6 @@ namespace RedditUniversal.Utils
         public async Task<Tuple<List<Subreddit>, string>> GetSubreddits(string parameters)
         {
             string url = "subreddits/mine/subscriber/";
-            url = (parameters.Equals("")) ? url : url + "?" + parameters;
             RestClient listings_request = new RestClient(url, state.access_token);
             string result = await listings_request.MakeRequest(parameters);
             List<Subreddit> subreddits = new List<Subreddit>();

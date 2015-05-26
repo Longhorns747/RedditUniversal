@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Row="0" Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-            <Button Content="Menu" Height="33" Width="57" Name="menu" Visibility="Collapsed" RequestedTheme="Dark" >
+            <Button Content="Menu" Height="33" Width="57" Name="menu" Visibility="Visible" RequestedTheme="Dark" >
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Name="links_but" Text="Links" Click="links_but_Click"/>

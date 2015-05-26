@@ -93,6 +93,16 @@ namespace RedditUniversal.DataModels
         public bool visited { get; set; }
         public object num_reports { get; set; }
         public object distinguished { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return title.Equals(((Subreddit)obj).title);
+        }
+
+        public override int GetHashCode()
+        {
+            return id.GetHashCode();
+        }
     }
 
     public class SubredditChild

@@ -89,5 +89,15 @@ namespace RedditUniversal.ViewModels
             this.Width = Window.Current.Bounds.Width;
             this.GetCaption().Width = this.Width - this.GetThumbnail().Width - 10; //So much jank, so little time
         }
+
+        public override bool Equals(object obj)
+        {
+            return subreddit.Equals(((SubredditButton)obj).subreddit);
+        }
+
+        public override int GetHashCode()
+        {
+            return subreddit.GetHashCode();
+        }
     }
 }

@@ -61,10 +61,26 @@ namespace RedditUniversal
 
         private async Task GetSubreddits(string parameters)
         {
-            Tuple<List<Subreddit>, string> result = await requester.GetSubreddits(parameters);
+            Tuple<List<Subreddit>, string> result = await requester.GetSubreddits("count=" + subreddit_buttons.Count() + "&" + parameters);
             List<Subreddit> subreddits = result.Item1;
             string after = result.Item2;
-            AddSubredditsToUI(subreddits, after);
+
+            foreach (Subreddit subreddit in subreddits)
+            {
+                SubredditButton curr_button = new SubredditButton(subreddit);
+                curr_button.Click += new RoutedEventHandler(subreddit_but_Click);
+                subreddit_buttons.Add(curr_button);
+            }
+
+            if (subreddit_buttons.Distinct().Count().Equals(subreddit_buttons.Count()))
+            {
+                await GetSubreddits("after=" + after);
+            }
+            else
+            {
+                subreddit_buttons = subreddit_buttons.Distinct().ToList();
+                AddSubredditsToUI(subreddit_buttons);
+            }            
         }
 
         /// <summary>
@@ -78,25 +94,20 @@ namespace RedditUniversal
             this.Frame.Navigate(typeof(LinksDisplay), current_state);
         }
 
-        private void AddSubredditsToUI(List<Subreddit> subreddits, string after)
+        private void AddSubredditsToUI(List<SubredditButton> subreddits)
         {
-            foreach(Subreddit subreddit in subreddits)
+            foreach (SubredditButton subreddit in subreddits)
             {
-                SubredditButton curr_button = new SubredditButton(subreddit);
-                curr_button.Click += new RoutedEventHandler(subreddit_but_Click);
 
-                Grid.SetRow(curr_button, num_subreddits);
-                num_subreddits++;
-                subreddit_buttons.Add(curr_button);
+                Grid.SetRow(subreddit, num_subreddits);
+                num_subreddits++;                
 
                 RowDefinition row = new RowDefinition();
                 row.Height = GridLength.Auto;
 
                 SubredditPanel.RowDefinitions.Add(row);
-                SubredditPanel.Children.Add(curr_button);
+                SubredditPanel.Children.Add(subreddit);
             }
-
-            AddAfterButtonToUI(after);
         }
 
         private void links_but_Click(object sender, RoutedEventArgs e)
@@ -115,41 +126,6 @@ namespace RedditUniversal
             {
                 button.resize_button();
             }
-        }
-
-        /// <summary>
-        /// Adds the "more" button to bottom of UI
-        /// </summary>
-        /// <param name="after"></param>
-        private void AddAfterButtonToUI(string after)
-        {
-            AfterButton after_but = new AfterButton(after);
-            after_but.Content = "More";
-            after_but.Click += new RoutedEventHandler(after_but_Click);
-            Grid.SetRow(after_but, num_subreddits);
-
-            RowDefinition row = new RowDefinition();
-            row.Height = GridLength.Auto;
-
-            SubredditPanel.RowDefinitions.Add(row);
-            SubredditPanel.Children.Add(after_but);
-        }
-
-        /// <summary>
-        /// Handler for the "more" button
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void after_but_Click(object sender, RoutedEventArgs e)
-        {
-            AfterButton after_but = (AfterButton)sender;
-            SubredditPanel.Children.Remove(after_but);
-            SubredditPanel.RowDefinitions.Remove(SubredditPanel.RowDefinitions.Last());
-            Tuple<List<Subreddit>, string> result = await requester.GetSubreddits("after=" + after_but.after + "&count=" + num_subreddits);
-            List<Subreddit> subreddits = result.Item1;
-            string after = result.Item2;
-
-            AddSubredditsToUI(subreddits, after);
         }
     }
 }

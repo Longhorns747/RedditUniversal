@@ -164,6 +164,7 @@ namespace RedditUniversal
             after_but.Content = "More";
             after_but.Click += new RoutedEventHandler(after_but_Click);
             Grid.SetRow(after_but, num_links);
+            after_but.HorizontalAlignment = HorizontalAlignment.Center;
 
             RowDefinition row = new RowDefinition();
             row.Height = GridLength.Auto;
