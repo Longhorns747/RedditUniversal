@@ -209,7 +209,7 @@ namespace RedditUniversal.Utils
         /// <returns></returns>
         private bool NeedToRefresh()
         {
-            return DateTime.Now.CompareTo(state.expire_time) > 0;
+            return DateTime.UtcNow.CompareTo(state.expire_time) > 0;
         }
     }
 }

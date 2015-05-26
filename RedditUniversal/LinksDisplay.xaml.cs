@@ -119,7 +119,7 @@ namespace RedditUniversal
         /// </summary>
         /// <param name="links"></param>
         /// <param name="after">The value of the next set of links to retrieve</param>
-        private void AddLinksToUI(List<Link> links, string after)
+        private async void AddLinksToUI(List<Link> links, string after)
         {
             foreach(Link link in links)
             {
@@ -140,7 +140,7 @@ namespace RedditUniversal
 
             if(num_links < max_count)
             {
-                GetHot("after=" + after);
+                await GetHot("after=" + after);
             }
             else
             {
@@ -263,6 +263,12 @@ namespace RedditUniversal
             current_state.current_subreddit = new Subreddit((string)roamingSettings.Values["current_subreddit_id"], (string)roamingSettings.Values["current_subreddit_display_name"]);
         }
 
+
+        /// <summary>
+        /// Logs the current user out by refreshing the current state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void logout_but_Click(object sender, RoutedEventArgs e)
         {
             State blank_state = new State();
