@@ -180,6 +180,8 @@ namespace RedditUniversal
         private async void after_but_Click(object sender, RoutedEventArgs e)
         {
             AfterButton after_but = (AfterButton)sender;
+            LinkPanel.Children.Remove(after_but);
+            LinkPanel.RowDefinitions.Remove(LinkPanel.RowDefinitions.Last());
             Tuple<List<Link>, string> result = await requester.GetHot("after=" + after_but.after + "&count=" + max_count);
             List<Link> links = result.Item1;
             string after = result.Item2;
