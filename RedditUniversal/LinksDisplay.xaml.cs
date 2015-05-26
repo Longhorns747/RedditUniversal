@@ -33,7 +33,7 @@ namespace RedditUniversal
         List<LinkButton> link_buttons = new List<LinkButton>();
         int num_links = 0;
         State current_state;
-        static int max_count = 0;
+        public static int max_count = 0;
         bool need_to_scroll = true; //TODO: Find better way to do this
 
         /// <summary>
@@ -114,6 +114,21 @@ namespace RedditUniversal
         }
 
         /// <summary>
+        /// Returns links for a specific subreddit in "hot" order
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        private async Task GetHot(Subreddit target, string parameters)
+        {
+            Tuple<List<Link>, string> result = await requester.GetHot(target, "count=" + max_count + "&" + parameters);
+            List<Link> links = result.Item1;
+            string after = result.Item2;
+
+            await AddLinksToUI(links, after);
+        }
+
+        /// <summary>
         /// Add a list of links to the UI
         /// </summary>
         /// <param name="links"></param>
@@ -137,9 +152,12 @@ namespace RedditUniversal
                 LinkPanel.Children.Add(curr_button);
             }
 
-            if(num_links < max_count)
+            if (num_links < max_count)
             {
-                await GetHot("after=" + after);
+                if (current_state.current_subreddit.id != null || !current_state.current_subreddit.id.Equals(""))
+                    await GetHot("after=" + after);
+                else
+                    await GetHot(current_state.current_subreddit, "after=" + after);
             }
             else
             {
@@ -293,6 +311,7 @@ namespace RedditUniversal
             blank_state.refresh_token = "";
             blank_state.expire_time = DateTime.Now;
             blank_state.logged_in = false;
+            max_count = 0;
             requester = await RedditRequester.MakeRedditRequester(blank_state);
 
             this.Frame.Navigate(typeof(LinksDisplay), blank_state);
@@ -307,6 +326,8 @@ namespace RedditUniversal
         {
             Subreddit subreddit = new Subreddit();
             current_state.current_subreddit = subreddit;
+            max_count = 0;
+            current_state.vertical_scroll_offset = 0;
             this.Frame.Navigate(typeof(LinksDisplay), current_state);
         }
     }

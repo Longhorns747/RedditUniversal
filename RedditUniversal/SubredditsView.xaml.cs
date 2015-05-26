@@ -92,6 +92,8 @@ namespace RedditUniversal
         private void subreddit_but_Click(object sender, RoutedEventArgs e)
         {
             current_state.current_subreddit = ((SubredditButton)sender).subreddit;
+            current_state.vertical_scroll_offset = 0;
+            LinksDisplay.max_count = 0;
             this.Frame.Navigate(typeof(LinksDisplay), current_state);
         }
 
