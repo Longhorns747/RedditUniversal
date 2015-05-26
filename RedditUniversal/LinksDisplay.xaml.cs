@@ -99,7 +99,7 @@ namespace RedditUniversal
             List<Link> links = result.Item1;
             string after = result.Item2;
 
-            AddLinksToUI(links, after);
+            await AddLinksToUI(links, after);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace RedditUniversal
             List<Link> links = result.Item1;
             string after = result.Item2;
 
-            AddLinksToUI(links, after);
+            await AddLinksToUI(links, after);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace RedditUniversal
         /// </summary>
         /// <param name="links"></param>
         /// <param name="after">The value of the next set of links to retrieve</param>
-        private async void AddLinksToUI(List<Link> links, string after)
+        private async Task AddLinksToUI(List<Link> links, string after)
         {
             foreach(Link link in links)
             {
@@ -186,7 +186,7 @@ namespace RedditUniversal
             List<Link> links = result.Item1;
             string after = result.Item2;
 
-            AddLinksToUI(links, after);
+            await AddLinksToUI(links, after);
         }
 
         /// <summary>
