@@ -77,5 +77,11 @@ namespace RedditUniversal.ViewModels
         {
             return CHILD_PADDING;
         }
+
+        public void resize_button()
+        {
+            this.Width = Window.Current.Bounds.Width - this.depth * this.GetChildPadding();
+            this.GetCaption().Width = Window.Current.Bounds.Width - (this.depth + 2) * this.GetChildPadding();
+        }
     }
 }

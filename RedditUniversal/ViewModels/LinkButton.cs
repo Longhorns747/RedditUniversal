@@ -103,12 +103,18 @@ namespace RedditUniversal.ViewModels
 
         public TextBlock GetCaption()
         {
-            return (TextBlock)((StackPanel)((StackPanel)this.Content).Children.Last()).Children.Last(); ;
+            return (TextBlock)((StackPanel)((StackPanel)this.Content).Children.Last()).Children.Last();
         }
 
         public int GetThumbSize()
         {
             return THUMBNAIL_SIZE;
+        }
+
+        public void resize_button()
+        {
+            this.Width = Window.Current.Bounds.Width;
+            this.GetCaption().Width = this.Width - this.GetThumbnail().Width - 10; //So much jank, so little time
         }
     }
 }

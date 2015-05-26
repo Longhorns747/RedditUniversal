@@ -190,8 +190,7 @@ namespace RedditUniversal
         {
             foreach(LinkButton button in link_buttons)
             {
-                button.Width = Window.Current.Bounds.Width;
-                button.GetCaption().Width = button.Width - button.GetThumbnail().Width; //So much jank, so little time
+                button.resize_button();
             }
         }
 
