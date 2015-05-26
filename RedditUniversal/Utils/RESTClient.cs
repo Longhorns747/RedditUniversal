@@ -116,7 +116,8 @@ namespace RedditUniversal.Utils
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadAsStringAsync();
+                    string content = await response.Content.ReadAsStringAsync();
+                    return content;
                 }
                 else
                 {

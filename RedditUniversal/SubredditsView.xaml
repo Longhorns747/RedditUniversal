@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="RedditUniversal.LinksDisplay"
+    x:Class="RedditUniversal.SubredditsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RedditUniversal"
@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid RequestedTheme="Dark" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid RequestedTheme="Dark" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -22,22 +22,20 @@
             <Button Content="Menu" Height="33" Width="57" Name="menu" Visibility="Collapsed" RequestedTheme="Dark" >
                 <Button.Flyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Name="login_but" Text="Login" Click="login_but_Click"/>
-                        <MenuFlyoutItem Name="subreddit_but" Text="Subreddits" Click="subreddit_but_Click"/>
-                        <MenuFlyoutItem Name="logout_but" Text ="Logout" Click="logout_but_Click" /> 
+                        <MenuFlyoutItem Name="links_but" Text="Links" Click="links_but_Click"/>
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
         
-            <TextBlock Name="current_subreddit_label" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Name="title_label" HorizontalAlignment="Center" VerticalAlignment="Center">
                 RedditUniversal
             </TextBlock>
         </Grid>
         
         <ProgressRing Name="progress_ring" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"  IsActive="True" Visibility="Visible" Grid.Row="1" RequestedTheme="Dark" Height="100" Width="100"/>
 
-        <ScrollViewer Name="LinkPanelScrollViewer" VerticalScrollBarVisibility="Hidden" Grid.Row="2" Grid.Column="0" HorizontalScrollMode="Disabled">
-            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Name="LinkPanel" RequestedTheme="Dark">
+        <ScrollViewer Name="SubredditPanelScrollViewer" VerticalScrollBarVisibility="Hidden" Grid.Row="2" Grid.Column="0" HorizontalScrollMode="Disabled">
+            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Name="SubredditPanel" RequestedTheme="Dark">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>

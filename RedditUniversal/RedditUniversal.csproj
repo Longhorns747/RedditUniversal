@@ -109,6 +109,9 @@
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SubredditsView.xaml.cs">
+      <DependentUpon>SubredditsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\RedditInfo.cs" />
     <Compile Include="ViewModels\AfterButton.cs" />
     <Compile Include="DataModels\Link.cs" />
@@ -156,6 +159,10 @@
     <Page Include="LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SubredditsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

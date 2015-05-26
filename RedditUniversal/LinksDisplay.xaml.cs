@@ -31,7 +31,6 @@ namespace RedditUniversal
     {
         RedditRequester requester;
         List<LinkButton> link_buttons = new List<LinkButton>();
-        List<Subreddit> subreddits;
         int num_links = 0;
         State current_state;
         static int max_count = 0;
@@ -62,29 +61,21 @@ namespace RedditUniversal
 
             if (current_state.logged_in)
             {
-                subreddits = await GetSubreddits();
                 login_but.Visibility = Visibility.Collapsed;
                 logout_but.Visibility = Visibility.Visible;
+                subreddit_but.Visibility = Visibility.Visible;
             }
             else
             {
                 login_but.Visibility = Visibility.Visible;
                 logout_but.Visibility = Visibility.Collapsed;
+                subreddit_but.Visibility = Visibility.Collapsed;
             }
 
             current_subreddit_label.Text = (current_state.current_subreddit.display_name.Equals("")) ? "Front Page" : current_state.current_subreddit.display_name;
 
             need_to_scroll = true;
             await GetHot("");
-        }
-
-        /// <summary>
-        /// Returns the user's subscribed subreddits
-        /// </summary>
-        /// <returns></returns>
-        private async Task<List<Subreddit>> GetSubreddits()
-        {
-            return await requester.GetSubreddits("");
         }
 
         /// <summary>
@@ -148,6 +139,7 @@ namespace RedditUniversal
                 {
                     progress_ring.Visibility = Visibility.Collapsed;
                     progress_ring.IsActive = false;
+                    menu.Visibility = Visibility.Visible;
                     bool res = LinkPanelScrollViewer.ChangeView(null, current_state.vertical_scroll_offset, null, false);
                     need_to_scroll = false;
                 }
@@ -288,6 +280,11 @@ namespace RedditUniversal
             requester = await RedditRequester.MakeRedditRequester(blank_state);
 
             this.Frame.Navigate(typeof(LinksDisplay), blank_state);
+        }
+
+        private void subreddit_but_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(SubredditsView), current_state);
         }
     }
 }
