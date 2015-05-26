@@ -41,7 +41,7 @@ namespace RedditUniversal.ViewModels
             author_bar.Children.Add(author);
 
             TextBlock subreddit = new TextBlock();
-            subreddit.Text = link.subreddit;
+            subreddit.Text = link.title;
             subreddit.FontSize = 12;
             subreddit.Foreground = Colors.NeutralColor;
             subreddit.Padding = new Thickness(2, 0, 0, 0);

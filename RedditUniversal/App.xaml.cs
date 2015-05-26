@@ -92,8 +92,10 @@ namespace RedditUniversal
                 current_state.refresh_token = (roamingSettings.Values["refresh_token"] != null) ? (string)roamingSettings.Values["refresh_token"] : "";
                 current_state.expire_time = (roamingSettings.Values["expire_time"] != null) ? DateTime.Parse((string)roamingSettings.Values["expire_time"]) : DateTime.Now;
                 current_state.logged_in = (roamingSettings.Values["logged_in"] != null) ? (bool)roamingSettings.Values["logged_in"] : false;
-                current_state.current_subreddit = (roamingSettings.Values["current_subreddit_id"] != null) ?
-                    new Subreddit((string)roamingSettings.Values["current_subreddit_id"], (string)roamingSettings.Values["current_subreddit_display_name"]) : new Subreddit("", "");
+                Subreddit current_subreddit = new Subreddit();
+                current_subreddit.id = (roamingSettings.Values["current_subreddit_id"] != null) ? (string)roamingSettings.Values["current_subreddit_id"] : "";
+                current_subreddit.title = (roamingSettings.Values["current_subreddit_display_name"] != null) ? (string)roamingSettings.Values["current_subreddit_display_name"] : "";
+                current_state.current_subreddit = current_subreddit;
 
                 current_state.current_link = new Link();
                 rootFrame.Navigate(typeof(LinksDisplay), current_state);

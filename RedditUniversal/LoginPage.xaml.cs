@@ -69,7 +69,7 @@ namespace RedditUniversal
                 }
 
                 state.logged_in = true;
-                state.current_subreddit = new Subreddit("", "");
+                state.current_subreddit = new Subreddit();
                 state.current_link = new Link();
                 this.Frame.Navigate(typeof(LinksDisplay), state);
             }            

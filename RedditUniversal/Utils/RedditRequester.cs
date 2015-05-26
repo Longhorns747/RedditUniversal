@@ -41,24 +41,13 @@ namespace RedditUniversal.Utils
             url = (parameters.Equals("")) ? url : url + "?" + parameters;
             RestClient listings_request = new RestClient(url, state.access_token);
             string result = await listings_request.MakeRequest(parameters);
-            JsonTextReader reader = new JsonTextReader(new StringReader(result));
             List<Subreddit> subreddits = new List<Subreddit>();
-            while (reader.Read())
+
+            SubredditTree subreddit_tree = JsonConvert.DeserializeObject<SubredditTree>(result);
+
+            foreach (SubredditChild subreddit in subreddit_tree.data.children)
             {
-                if (reader.Value != null && reader.Value.Equals("id"))
-                {
-                    reader.Read();
-                    string id = (string)reader.Value;
-
-                    while (!reader.Value.Equals("display_name"))
-                    {
-                        reader.Read();
-                    }
-
-                    reader.Read();
-                    string display_name = (string)reader.Value;
-                    subreddits.Add(new Subreddit(id, display_name));
-                }
+                subreddits.Add(subreddit.data);
             }
 
             return subreddits;
@@ -71,7 +60,7 @@ namespace RedditUniversal.Utils
         /// <returns></returns>
         public async Task<Tuple<List<Link>, string>> GetHot(string parameters)
         {
-            return await GetHot(new Subreddit("", ""), parameters);
+            return await GetHot(new Subreddit(), parameters);
         }
 
         /// <summary>
@@ -84,7 +73,7 @@ namespace RedditUniversal.Utils
         public async Task<Tuple<List<Link>, string>> GetHot(Subreddit target, string parameters)
         {
             List<Link> links = new List<Link>();
-            string url = (target.id.Equals("")) ? "/hot" : "/r/" + target.display_name + "/hot";
+            string url = (target.id == null) ? "/hot" : "/r/" + target.title + "/hot";
             url = (parameters.Equals("")) ? url : url + "?" + parameters;
             RestClient listings_request = new RestClient(url, state.access_token);
             string result = await listings_request.MakeRequest(parameters);
