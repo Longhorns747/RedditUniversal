@@ -123,8 +123,8 @@ namespace RedditUniversal
         {
             foreach (CommentButton button in comment_buttons)
             {
-                button.Width = Window.Current.Bounds.Width;
-                button.GetCaption().Width = Window.Current.Bounds.Width - button.depth * button.GetChildPadding();
+                button.Width = Window.Current.Bounds.Width - button.depth* button.GetChildPadding();
+                button.GetCaption().Width = Window.Current.Bounds.Width - (button.depth + 2) * button.GetChildPadding();
             }
         }
     }

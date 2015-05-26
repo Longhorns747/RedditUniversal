@@ -58,9 +58,9 @@ namespace RedditUniversal.ViewModels
             //Set up caption
             TextBlock caption = new TextBlock();
             caption.Text = comment.body;
-            caption.TextWrapping = TextWrapping.Wrap;
+            caption.TextWrapping = TextWrapping.WrapWholeWords;
             caption.Foreground = Colors.TextColor;
-            caption.Width = Window.Current.Bounds.Width - CHILD_PADDING * depth;
+            caption.Width = Window.Current.Bounds.Width - CHILD_PADDING * (depth + 2);
             button_content.Children.Add(caption);
 
             this.Content = button_content;
