@@ -14,14 +14,14 @@ namespace RedditUniversal.ViewModels
     /// <summary>
     /// A button for a link
     /// </summary>
-    class LinkButton : Button
+    class SubredditButton : Button
     {
-        public Link link { get; set; }
+        public Subreddit subreddit { get; set; }
         public const int THUMBNAIL_SIZE = 70;
 
-        public LinkButton(Link link)
+        public SubredditButton(Subreddit subreddit)
         {
-            this.link = link;
+            this.subreddit = subreddit;
 
             this.HorizontalAlignment = HorizontalAlignment.Stretch;
             this.Width = Window.Current.Bounds.Width;
@@ -29,33 +29,6 @@ namespace RedditUniversal.ViewModels
             StackPanel button_content = new StackPanel();
             button_content.Orientation = Orientation.Vertical;
             this.HorizontalContentAlignment = HorizontalAlignment.Stretch;
-
-            //Set up author bar
-            StackPanel author_bar = new StackPanel();
-            author_bar.Orientation = Orientation.Horizontal;
-
-            TextBlock author = new TextBlock();
-            author.Text = link.author;
-            author.FontSize = 12;
-            author.Foreground = Colors.AuthorTextColor;
-            author_bar.Children.Add(author);
-
-            TextBlock subreddit = new TextBlock();
-            subreddit.Text = link.subreddit;
-            subreddit.FontSize = 12;
-            subreddit.Foreground = Colors.NeutralColor;
-            subreddit.Padding = new Thickness(2, 0, 0, 0);
-            author_bar.Children.Add(subreddit);
-
-            TextBlock score = new TextBlock();
-            score.Text = link.score.ToString();
-            score.FontSize = 12;
-            score.Padding = new Thickness(2, 0, 0, 0);
-            score.Foreground = Colors.NeutralColor;
-            score.HorizontalAlignment = HorizontalAlignment.Right;
-            author_bar.Children.Add(score);
-
-            button_content.Children.Add(author_bar);
 
             //Set up caption bar
             StackPanel caption_bar = new StackPanel();
@@ -69,7 +42,7 @@ namespace RedditUniversal.ViewModels
             thumbnail.VerticalAlignment = VerticalAlignment.Center;
 
             Uri thumb;
-            if (Uri.TryCreate(link.thumbnail, UriKind.Absolute, out thumb))
+            if (Uri.TryCreate(subreddit.thumbnail, UriKind.Absolute, out thumb))
             {
                 BitmapImage myBitmapImage = new BitmapImage(thumb);
                 thumbnail.Width = THUMBNAIL_SIZE;
@@ -81,7 +54,7 @@ namespace RedditUniversal.ViewModels
 
             //Set up caption
             TextBlock caption = new TextBlock();
-            caption.Text = link.title;
+            caption.Text = subreddit.title;
             caption.TextWrapping = TextWrapping.WrapWholeWords;
             caption.Width = Window.Current.Bounds.Width - thumbnail.Width;
             caption.Padding = new Thickness(10);

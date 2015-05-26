@@ -35,7 +35,7 @@ namespace RedditUniversal.Utils
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public async Task<List<Subreddit>> GetSubreddits(string parameters)
+        public async Task<Tuple<List<Subreddit>, string>> GetSubreddits(string parameters)
         {
             string url = "subreddits/mine/subscriber/";
             url = (parameters.Equals("")) ? url : url + "?" + parameters;
@@ -50,7 +50,7 @@ namespace RedditUniversal.Utils
                 subreddits.Add(subreddit.data);
             }
 
-            return subreddits;
+            return new Tuple<List<Subreddit>, string>(subreddits, subreddit_tree.data.after); ;
         }
 
         /// <summary>
