@@ -23,14 +23,14 @@ using Windows.UI.Xaml.Navigation;
 namespace RedditUniversal
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// A page to display a logged-in user's subreddits
     /// </summary>
     public sealed partial class SubredditsView : Page
     {
         RedditRequester requester;
         State current_state;
         int num_subreddits = 0;
-        List<SubredditButton> subreddit_buttons = new List<SubredditButton>();
+        List<SubredditButton> subreddit_buttons;
 
         public SubredditsView()
         {
@@ -42,10 +42,11 @@ namespace RedditUniversal
         {
             current_state = (State)(e.Parameter);
             requester = await RedditRequester.MakeRedditRequester(current_state);
+            subreddit_buttons = new List<SubredditButton>();
 
             current_state = await requester.RefreshToken();
-
             await GetSubreddits();
+
             progress_ring.Visibility = Visibility.Collapsed;
             progress_ring.IsActive = false;
         }

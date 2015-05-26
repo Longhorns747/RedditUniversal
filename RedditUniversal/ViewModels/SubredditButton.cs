@@ -54,7 +54,7 @@ namespace RedditUniversal.ViewModels
 
             //Set up caption
             TextBlock caption = new TextBlock();
-            caption.Text = subreddit.title;
+            caption.Text = subreddit.url;
             caption.TextWrapping = TextWrapping.WrapWholeWords;
             caption.Width = Window.Current.Bounds.Width - thumbnail.Width;
             caption.Padding = new Thickness(10);

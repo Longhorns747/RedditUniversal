@@ -24,6 +24,7 @@
                     <MenuFlyout>
                         <MenuFlyoutItem Name="login_but" Text="Login" Click="login_but_Click"/>
                         <MenuFlyoutItem Name="subreddit_but" Text="Subreddits" Click="subreddit_but_Click"/>
+                        <MenuFlyoutItem Name="front_page_but" Text="Front Page" Click="front_page_but_Click"/>
                         <MenuFlyoutItem Name="logout_but" Text ="Logout" Click="logout_but_Click" /> 
                     </MenuFlyout>
                 </Button.Flyout>

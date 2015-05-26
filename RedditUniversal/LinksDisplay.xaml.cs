@@ -78,6 +78,7 @@ namespace RedditUniversal
             if(current_state.current_subreddit.title == null || current_state.current_subreddit.title.Equals(""))
             {
                 await GetHot("");
+                front_page_but.Visibility = Visibility.Collapsed;
             }
             else
             {
@@ -300,6 +301,13 @@ namespace RedditUniversal
         private void subreddit_but_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(SubredditsView), current_state);
+        }
+
+        private void front_page_but_Click(object sender, RoutedEventArgs e)
+        {
+            Subreddit subreddit = new Subreddit();
+            current_state.current_subreddit = subreddit;
+            this.Frame.Navigate(typeof(LinksDisplay), current_state);
         }
     }
 }
