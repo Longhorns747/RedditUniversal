@@ -69,13 +69,12 @@ namespace RedditUniversal
             {
                 login_but.Visibility = Visibility.Visible;
                 logout_but.Visibility = Visibility.Collapsed;
-            }               
+            }
 
             current_subreddit_label.Text = (current_state.current_subreddit.display_name.Equals("")) ? "Front Page" : current_state.current_subreddit.display_name;
 
             await GetHot("");
             progress_ring.Visibility = Visibility.Collapsed;
-            bool res = LinkPanelScrollViewer.ChangeView(null, current_state.vertical_scroll_offset, null, false);
             progress_ring.IsActive = false;
         }
 
@@ -164,6 +163,9 @@ namespace RedditUniversal
 
             LinkPanel.RowDefinitions.Add(row);
             LinkPanel.Children.Add(after_but);
+
+            bool res = LinkPanelScrollViewer.ChangeView(null, current_state.vertical_scroll_offset, null, false);
+
         }
 
         /// <summary>

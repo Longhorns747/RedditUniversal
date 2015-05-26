@@ -177,7 +177,6 @@ namespace RedditUniversal.Utils
                     if (content.Contains("access_token"))
                     {
                         JsonTextReader reader = new JsonTextReader(new StringReader(content));
-                        State state = new State();
 
                         while (reader.Read())
                         {
@@ -186,13 +185,13 @@ namespace RedditUniversal.Utils
                                 if (reader.Value.Equals("access_token"))
                                 {
                                     reader.Read();
-                                    state.access_token = (string)reader.Value;
+                                    this.state.access_token = (string)reader.Value;
                                 }
                                 else if (reader.Value.Equals("expires_in"))
                                 {
                                     reader.Read();
                                     Int64 expires_in = (Int64)reader.Value;
-                                    state.expire_time = DateTime.UtcNow.AddSeconds(expires_in);
+                                    this.state.expire_time = DateTime.UtcNow.AddSeconds(expires_in);
                                 }
                             }
                         }
