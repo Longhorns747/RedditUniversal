@@ -76,8 +76,6 @@ namespace RedditUniversal
 
             need_to_scroll = true;
             await GetHot("");
-            progress_ring.Visibility = Visibility.Collapsed;
-            progress_ring.IsActive = false;
         }
 
         /// <summary>
@@ -148,6 +146,8 @@ namespace RedditUniversal
                 AddAfterButtonToUI(after);
                 if (need_to_scroll)
                 {
+                    progress_ring.Visibility = Visibility.Collapsed;
+                    progress_ring.IsActive = false;
                     bool res = LinkPanelScrollViewer.ChangeView(null, current_state.vertical_scroll_offset, null, false);
                     need_to_scroll = false;
                 }
