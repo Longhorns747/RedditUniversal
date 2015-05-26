@@ -93,8 +93,6 @@ namespace RedditUniversal
                 current_state.expire_time = (roamingSettings.Values["expire_time"] != null) ? DateTime.Parse((string)roamingSettings.Values["expire_time"]) : DateTime.Now;
                 current_state.logged_in = (roamingSettings.Values["logged_in"] != null) ? (bool)roamingSettings.Values["logged_in"] : false;
                 Subreddit current_subreddit = new Subreddit();
-                current_subreddit.id = (roamingSettings.Values["current_subreddit_id"] != null) ? (string)roamingSettings.Values["current_subreddit_id"] : "";
-                current_subreddit.title = (roamingSettings.Values["current_subreddit_display_name"] != null) ? (string)roamingSettings.Values["current_subreddit_display_name"] : "";
                 current_state.current_subreddit = current_subreddit;
 
                 current_state.current_link = new Link();

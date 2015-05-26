@@ -95,6 +95,8 @@ namespace RedditUniversal
                 SubredditPanel.RowDefinitions.Add(row);
                 SubredditPanel.Children.Add(curr_button);
             }
+
+            AddAfterButtonToUI(after);
         }
 
         private void links_but_Click(object sender, RoutedEventArgs e)
@@ -113,6 +115,41 @@ namespace RedditUniversal
             {
                 button.resize_button();
             }
+        }
+
+        /// <summary>
+        /// Adds the "more" button to bottom of UI
+        /// </summary>
+        /// <param name="after"></param>
+        private void AddAfterButtonToUI(string after)
+        {
+            AfterButton after_but = new AfterButton(after);
+            after_but.Content = "More";
+            after_but.Click += new RoutedEventHandler(after_but_Click);
+            Grid.SetRow(after_but, num_subreddits);
+
+            RowDefinition row = new RowDefinition();
+            row.Height = GridLength.Auto;
+
+            SubredditPanel.RowDefinitions.Add(row);
+            SubredditPanel.Children.Add(after_but);
+        }
+
+        /// <summary>
+        /// Handler for the "more" button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void after_but_Click(object sender, RoutedEventArgs e)
+        {
+            AfterButton after_but = (AfterButton)sender;
+            SubredditPanel.Children.Remove(after_but);
+            SubredditPanel.RowDefinitions.Remove(SubredditPanel.RowDefinitions.Last());
+            Tuple<List<Subreddit>, string> result = await requester.GetSubreddits("after=" + after_but.after + "&count=" + num_subreddits);
+            List<Subreddit> subreddits = result.Item1;
+            string after = result.Item2;
+
+            AddSubredditsToUI(subreddits, after);
         }
     }
 }

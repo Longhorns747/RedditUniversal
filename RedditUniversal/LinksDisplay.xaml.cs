@@ -75,7 +75,15 @@ namespace RedditUniversal
             current_subreddit_label.Text = (current_state.current_subreddit.title == null || current_state.current_subreddit.title.Equals("")) ? "Front Page" : current_state.current_subreddit.title;
 
             need_to_scroll = true;
-            await GetHot("");
+            if(current_state.current_subreddit.title == null || current_state.current_subreddit.title.Equals(""))
+            {
+                await GetHot("");
+            }
+            else
+            {
+                await GetHot(current_state.current_subreddit);
+            }
+            
         }
 
         /// <summary>
@@ -174,7 +182,17 @@ namespace RedditUniversal
             AfterButton after_but = (AfterButton)sender;
             LinkPanel.Children.Remove(after_but);
             LinkPanel.RowDefinitions.Remove(LinkPanel.RowDefinitions.Last());
-            Tuple<List<Link>, string> result = await requester.GetHot("after=" + after_but.after + "&count=" + max_count);
+            Tuple<List<Link>, string> result;
+
+            if (current_state.current_subreddit.title == null || current_state.current_subreddit.title.Equals(""))
+            {
+                result = await requester.GetHot("after=" + after_but.after + "&count=" + max_count);
+            }
+            else
+            {
+                result = await requester.GetHot(current_state.current_subreddit, "after=" + after_but.after + "&count=" + max_count);
+            }
+                
             List<Link> links = result.Item1;
             string after = result.Item2;
 
@@ -228,8 +246,6 @@ namespace RedditUniversal
             roamingSettings.Values["refresh_token"] = current_state.refresh_token;
             roamingSettings.Values["expire_time"] = current_state.expire_time.ToString();
             roamingSettings.Values["logged_in"] = current_state.logged_in;
-            roamingSettings.Values["current_subreddit_id"] = current_state.current_subreddit.id;
-            roamingSettings.Values["current_subreddit_display_name"] = current_state.current_subreddit.title;
         }
 
         /// <summary>
@@ -244,10 +260,6 @@ namespace RedditUniversal
             current_state.refresh_token = (string)roamingSettings.Values["refresh_token"];
             current_state.expire_time = DateTime.Parse((string)roamingSettings.Values["expire_time"]);
             current_state.logged_in = (bool)roamingSettings.Values["logged_in"];
-            Subreddit current_subreddit = new Subreddit();
-            current_subreddit.id = (string)roamingSettings.Values["current_subreddit_id"];
-            current_subreddit.title = (string)roamingSettings.Values["current_subreddit_display_name"];
-            current_state.current_subreddit = current_subreddit;
         }
 
         /// <summary>
@@ -262,10 +274,6 @@ namespace RedditUniversal
             current_state.refresh_token = (string)roamingSettings.Values["refresh_token"];
             current_state.expire_time = DateTime.Parse((string)roamingSettings.Values["expire_time"]);
             current_state.logged_in = (bool)roamingSettings.Values["logged_in"];
-            Subreddit current_subreddit = new Subreddit();
-            current_subreddit.id = (string)roamingSettings.Values["current_subreddit_id"];
-            current_subreddit.title = (string)roamingSettings.Values["current_subreddit_display_name"];
-            current_state.current_subreddit = current_subreddit;
         }
 
 

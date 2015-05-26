@@ -73,7 +73,7 @@ namespace RedditUniversal.Utils
         public async Task<Tuple<List<Link>, string>> GetHot(Subreddit target, string parameters)
         {
             List<Link> links = new List<Link>();
-            string url = (target.id == null) ? "/hot" : "/r/" + target.title + "/hot";
+            string url = (target.id == null) ? "/hot" : target.url + "hot";
             url = (parameters.Equals("")) ? url : url + "?" + parameters;
             RestClient listings_request = new RestClient(url, state.access_token);
             string result = await listings_request.MakeRequest(parameters);
