@@ -35,6 +35,7 @@ namespace RedditUniversal
         int num_links = 0;
         State current_state;
         static int max_count = 0;
+        bool need_to_scroll = true; //TODO: Find better way to do this
 
         /// <summary>
         /// Initalizes the LinkDisplay and adds some application level handlers as this is the first page to run
@@ -73,6 +74,7 @@ namespace RedditUniversal
 
             current_subreddit_label.Text = (current_state.current_subreddit.display_name.Equals("")) ? "Front Page" : current_state.current_subreddit.display_name;
 
+            need_to_scroll = true;
             await GetHot("");
             progress_ring.Visibility = Visibility.Collapsed;
             progress_ring.IsActive = false;
@@ -144,6 +146,11 @@ namespace RedditUniversal
             else
             {
                 AddAfterButtonToUI(after);
+                if (need_to_scroll)
+                {
+                    bool res = LinkPanelScrollViewer.ChangeView(null, current_state.vertical_scroll_offset, null, false);
+                    need_to_scroll = false;
+                }
             }
         }
 
@@ -163,9 +170,6 @@ namespace RedditUniversal
 
             LinkPanel.RowDefinitions.Add(row);
             LinkPanel.Children.Add(after_but);
-
-            bool res = LinkPanelScrollViewer.ChangeView(null, current_state.vertical_scroll_offset, null, false);
-
         }
 
         /// <summary>
